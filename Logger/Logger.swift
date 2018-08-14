@@ -22,6 +22,56 @@
 // SOFTWARE.
 //
 
-class Logger {
+import Foundation
 
+public protocol Logger {
+    func log(time: String, level: LogLevel, location: String, object: String)
+    
+    func description(for date: Date) -> String
+    func description(for file: String, line: Int, function: String) -> String
+    func description(for object: Any) -> String
 }
+
+public enum LogLevel: String {
+    case `default` = "Default"
+    case info = "Info"
+    case debug = "Debug"
+    case error = "Error"
+    case fault = "Fault"
+}
+
+extension Logger {
+    public func log(_ object: Any, level: LogLevel = .default, file: String = #file, line: Int = #line, function: String = #function) {
+        let now = Date()
+        let time = description(for: now)
+        let location = description(for: file, line: line, function: function)
+        let objectDescription = description(for: object)
+        log(time: time, level: level, location: location, object: objectDescription)
+    }
+    
+    public func description(for date: Date) -> String {
+        return dateFormatter.string(from: date)
+    }
+    
+    public func description(for file: String, line: Int, function: String) -> String {
+        return filename(fromFilePath: file) + ":\(line) \(function)"
+    }
+    
+    public func description(for object: Any) -> String {
+        if let logStringConvertible = object as? LogStringConvertible {
+            return logStringConvertible.logDescription
+        }
+        return String(describing: object)
+    }
+    
+    private func filename(fromFilePath path: String) -> String {
+        return URL(fileURLWithPath: path).deletingPathExtension().lastPathComponent
+    }
+}
+
+private let dateFormatter: DateFormatter = {
+    let formatter = DateFormatter()
+    formatter.dateFormat = "yyyy-MM-dd HH:mm:ss.SSS"
+    formatter.timeZone = TimeZone(secondsFromGMT: 0)
+    return formatter
+}()

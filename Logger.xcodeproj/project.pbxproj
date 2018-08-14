@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		2EBF4B3E2122AA34008E4117 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EBF4B3D2122AA34008E4117 /* Logger.swift */; };
+		2EBF4B452122ACD6008E4117 /* LogStringConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EBF4B442122ACD6008E4117 /* LogStringConvertible.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -25,6 +26,7 @@
 /* Begin PBXFileReference section */
 		2EBF4B3A2122AA34008E4117 /* libLogger.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libLogger.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		2EBF4B3D2122AA34008E4117 /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
+		2EBF4B442122ACD6008E4117 /* LogStringConvertible.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogStringConvertible.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,6 +59,7 @@
 		2EBF4B3C2122AA34008E4117 /* Logger */ = {
 			isa = PBXGroup;
 			children = (
+				2EBF4B442122ACD6008E4117 /* LogStringConvertible.swift */,
 				2EBF4B3D2122AA34008E4117 /* Logger.swift */,
 			);
 			path = Logger;
@@ -120,6 +123,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2EBF4B3E2122AA34008E4117 /* Logger.swift in Sources */,
+				2EBF4B452122ACD6008E4117 /* LogStringConvertible.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -12,6 +12,7 @@
 		2EBF4B4A2122AF53008E4117 /* AgregateLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EBF4B472122AF53008E4117 /* AgregateLogger.swift */; };
 		2EBF4B4B2122AF53008E4117 /* ConsoleLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EBF4B482122AF53008E4117 /* ConsoleLogger.swift */; };
 		2EBF4B4C2122AF53008E4117 /* NullLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EBF4B492122AF53008E4117 /* NullLogger.swift */; };
+		2EBF4B512122B06E008E4117 /* NSFileHandle+Swift.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EBF4B502122B06E008E4117 /* NSFileHandle+Swift.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -33,6 +34,9 @@
 		2EBF4B472122AF53008E4117 /* AgregateLogger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AgregateLogger.swift; sourceTree = "<group>"; };
 		2EBF4B482122AF53008E4117 /* ConsoleLogger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConsoleLogger.swift; sourceTree = "<group>"; };
 		2EBF4B492122AF53008E4117 /* NullLogger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NullLogger.swift; sourceTree = "<group>"; };
+		2EBF4B4F2122B06E008E4117 /* NSFileHandle+Swift.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSFileHandle+Swift.h"; sourceTree = "<group>"; };
+		2EBF4B502122B06E008E4117 /* NSFileHandle+Swift.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSFileHandle+Swift.m"; sourceTree = "<group>"; };
+		2EBF4B532122B2AA008E4117 /* Logger-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Logger-Bridging-Header.h"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -65,6 +69,7 @@
 		2EBF4B3C2122AA34008E4117 /* Logger */ = {
 			isa = PBXGroup;
 			children = (
+				2EBF4B532122B2AA008E4117 /* Logger-Bridging-Header.h */,
 				2EBF4B442122ACD6008E4117 /* LogStringConvertible.swift */,
 				2EBF4B3D2122AA34008E4117 /* Logger.swift */,
 				2EBF4B462122AF53008E4117 /* Loggers */,
@@ -78,8 +83,18 @@
 				2EBF4B472122AF53008E4117 /* AgregateLogger.swift */,
 				2EBF4B482122AF53008E4117 /* ConsoleLogger.swift */,
 				2EBF4B492122AF53008E4117 /* NullLogger.swift */,
+				2EBF4B4D2122B034008E4117 /* DiskLogger */,
 			);
 			path = Loggers;
+			sourceTree = "<group>";
+		};
+		2EBF4B4D2122B034008E4117 /* DiskLogger */ = {
+			isa = PBXGroup;
+			children = (
+				2EBF4B4F2122B06E008E4117 /* NSFileHandle+Swift.h */,
+				2EBF4B502122B06E008E4117 /* NSFileHandle+Swift.m */,
+			);
+			path = DiskLogger;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -114,6 +129,7 @@
 				TargetAttributes = {
 					2EBF4B392122AA34008E4117 = {
 						CreatedOnToolsVersion = 10.0;
+						LastSwiftMigration = 1000;
 					};
 				};
 			};
@@ -141,6 +157,7 @@
 			files = (
 				2EBF4B4C2122AF53008E4117 /* NullLogger.swift in Sources */,
 				2EBF4B3E2122AA34008E4117 /* Logger.swift in Sources */,
+				2EBF4B512122B06E008E4117 /* NSFileHandle+Swift.m in Sources */,
 				2EBF4B4B2122AF53008E4117 /* ConsoleLogger.swift in Sources */,
 				2EBF4B4A2122AF53008E4117 /* AgregateLogger.swift in Sources */,
 				2EBF4B452122ACD6008E4117 /* LogStringConvertible.swift in Sources */,
@@ -269,10 +286,18 @@
 		2EBF4B422122AA34008E4117 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "Logger/Logger-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -281,10 +306,17 @@
 		2EBF4B432122AA34008E4117 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "Logger/Logger-Bridging-Header.h";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

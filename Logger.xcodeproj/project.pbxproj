@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		2EBF4B3E2122AA34008E4117 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EBF4B3D2122AA34008E4117 /* Logger.swift */; };
 		2EBF4B452122ACD6008E4117 /* LogStringConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EBF4B442122ACD6008E4117 /* LogStringConvertible.swift */; };
+		2EBF4B4A2122AF53008E4117 /* AgregateLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EBF4B472122AF53008E4117 /* AgregateLogger.swift */; };
+		2EBF4B4B2122AF53008E4117 /* ConsoleLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EBF4B482122AF53008E4117 /* ConsoleLogger.swift */; };
+		2EBF4B4C2122AF53008E4117 /* NullLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EBF4B492122AF53008E4117 /* NullLogger.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -27,6 +30,9 @@
 		2EBF4B3A2122AA34008E4117 /* libLogger.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libLogger.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		2EBF4B3D2122AA34008E4117 /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
 		2EBF4B442122ACD6008E4117 /* LogStringConvertible.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogStringConvertible.swift; sourceTree = "<group>"; };
+		2EBF4B472122AF53008E4117 /* AgregateLogger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AgregateLogger.swift; sourceTree = "<group>"; };
+		2EBF4B482122AF53008E4117 /* ConsoleLogger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConsoleLogger.swift; sourceTree = "<group>"; };
+		2EBF4B492122AF53008E4117 /* NullLogger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NullLogger.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -61,8 +67,19 @@
 			children = (
 				2EBF4B442122ACD6008E4117 /* LogStringConvertible.swift */,
 				2EBF4B3D2122AA34008E4117 /* Logger.swift */,
+				2EBF4B462122AF53008E4117 /* Loggers */,
 			);
 			path = Logger;
+			sourceTree = "<group>";
+		};
+		2EBF4B462122AF53008E4117 /* Loggers */ = {
+			isa = PBXGroup;
+			children = (
+				2EBF4B472122AF53008E4117 /* AgregateLogger.swift */,
+				2EBF4B482122AF53008E4117 /* ConsoleLogger.swift */,
+				2EBF4B492122AF53008E4117 /* NullLogger.swift */,
+			);
+			path = Loggers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -122,7 +139,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2EBF4B4C2122AF53008E4117 /* NullLogger.swift in Sources */,
 				2EBF4B3E2122AA34008E4117 /* Logger.swift in Sources */,
+				2EBF4B4B2122AF53008E4117 /* ConsoleLogger.swift in Sources */,
+				2EBF4B4A2122AF53008E4117 /* AgregateLogger.swift in Sources */,
 				2EBF4B452122ACD6008E4117 /* LogStringConvertible.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

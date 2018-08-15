@@ -24,7 +24,9 @@
 
 import Foundation
 
+/// Logger that writes messages into the file at specified URL with log rotation support.
 public final class DiskLogger: Logger {
+    
     private let fileURL: URL
     private let fileSizeLimit: UInt64
     private let rotations: Int
@@ -32,6 +34,12 @@ public final class DiskLogger: Logger {
     private var buffer = Data()
     private var fileWriter: FileWriter!
     
+    /// Initializes new DiskLogger instance.
+    ///
+    /// - Parameters:
+    ///   - fileURL: URL of the log file.
+    ///   - fileSizeLimit: Maximum size log file can reach in bytes. Attempt to exceeding that limit triggers log files rotation.
+    ///   - rotations: Number of times log files are rotated before being removed.
     public init(fileURL: URL, fileSizeLimit: UInt64, rotations: Int) {
         self.fileURL = fileURL
         self.fileSizeLimit = fileSizeLimit

@@ -24,6 +24,7 @@
 
 import Foundation
 
+/// Logger that writes messages into the standard output.
 public final class ConsoleLogger: Logger {
     public init() {
     }

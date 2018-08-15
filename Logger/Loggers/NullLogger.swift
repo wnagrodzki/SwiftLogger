@@ -24,6 +24,7 @@
 
 import Foundation
 
+/// Logger that ignores all messages with the intention to minimize observer effect.
 public class NullLogger: Logger {
     public init() {
     }
@@ -32,14 +33,17 @@ public class NullLogger: Logger {
         // noop
     }
     
+    /// Returns empty string to minimize observer effect.
     public func description(for date: Date) -> String {
         return ""
     }
     
+    /// Returns empty string to minimize observer effect.
     public func description(for file: String, line: Int, function: String) -> String {
         return ""
     }
     
+    /// Returns empty string to minimize observer effect.
     public func description(for object: Any) -> String {
         return ""
     }

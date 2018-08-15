@@ -24,9 +24,14 @@
 
 import Foundation
 
+/// Logger that forwards messages to all the loggers it is intialized with.
 public final class AgregateLogger: Logger {
+    
     private let loggers: [Logger]
     
+    /// Initializes new AgregateLogger instance.
+    ///
+    /// - Parameter loggers: Array of loggers all messages will be forwarded to.
     public init(loggers: [Logger]) {
         self.loggers = loggers
     }

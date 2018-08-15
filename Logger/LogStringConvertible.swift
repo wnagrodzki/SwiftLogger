@@ -24,11 +24,15 @@
 
 import Foundation
 
+/// A type with a customized textual representation suitable for logging purposes.
 public protocol LogStringConvertible {
+    
+    /// A textual representation of this instance, suitable for logging.
     var logDescription: String { get }
 }
 
 extension Array: LogStringConvertible where Element: LogStringConvertible {
+    
     public var logDescription: String {
         let descriptions = map { $0.logDescription }
         let joinedDescriptions = descriptions.joined(separator: ", ")

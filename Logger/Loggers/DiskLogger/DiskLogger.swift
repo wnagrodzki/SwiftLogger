@@ -51,7 +51,7 @@ public final class DiskLogger: Logger {
     }
     
     public func log(time: Date, level: LogLevel, location: String, object: String) {
-        let message = formatter.string(from: time) + " <" + level.rawValue + "> " + location + " " + object + "\n"
+        let message = formatter.string(from: time) + " <" + level.logDescription + "> " + location + " " + object + "\n"
         log(message)
     }
     

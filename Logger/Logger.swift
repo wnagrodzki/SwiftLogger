@@ -58,22 +58,35 @@ public protocol Logger {
 }
 
 /// Log level controls the conditions under which a message should be logged.
-public enum LogLevel: String {
+public enum LogLevel: Int {
     
     /// Use this level to capture information about things that might result a failure.
-    case `default` = "Default"
+    case `default`
     
     /// Use this level to capture information that may be helpful, but isn’t essential, for troubleshooting errors.
-    case info = "Info"
+    case info
     
     /// Use this level to capture information that may be useful during development or while troubleshooting a specific problem.
-    case debug = "Debug"
+    case debug
     
     /// Use this log level to capture process-level information to report errors in the process.
-    case error = "Error"
+    case error
     
     /// Use this level to capture system-level or multi-process information to report system errors.
-    case fault = "Fault"
+    case fault
+}
+
+extension LogLevel: LogStringConvertible {
+    
+    public var logDescription: String {
+        switch self {
+        case .default: return "Default"
+        case .info: return "Info"
+        case .debug: return "Debug"
+        case .error: return "Error"
+        case .fault: return "Fault"
+        }
+    }
 }
 
 extension Logger {

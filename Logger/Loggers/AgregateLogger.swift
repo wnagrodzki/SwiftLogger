@@ -36,7 +36,7 @@ public final class AgregateLogger: Logger {
         self.loggers = loggers
     }
     
-    public func log(time: String, level: LogLevel, location: String, object: String) {
+    public func log(time: Date, level: LogLevel, location: String, object: String) {
         for logger in self.loggers {
             logger.log(time: time, level: level, location: location, object: object)
         }

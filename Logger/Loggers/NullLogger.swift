@@ -29,13 +29,8 @@ public class NullLogger: Logger {
     public init() {
     }
     
-    public func log(time: String, level: LogLevel, location: String, object: String) {
+    public func log(time: Date, level: LogLevel, location: String, object: String) {
         // noop
-    }
-    
-    /// Returns empty string to minimize observer effect.
-    public func description(for date: Date) -> String {
-        return ""
     }
     
     /// Returns empty string to minimize observer effect.

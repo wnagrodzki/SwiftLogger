@@ -26,10 +26,16 @@ import Foundation
 
 /// Logger that writes messages into the standard output.
 public final class ConsoleLogger: Logger {
+    
+    private let formatter: DateFormatter
+    
     public init() {
+        formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd HH:mm:ss.SSS"
+        formatter.timeZone = TimeZone(secondsFromGMT: 0)
     }
     
-    public func log(time: String, level: LogLevel, location: String, object: String) {
-        print(time + " <" + level.rawValue + "> " + location + " " + object)
+    public func log(time: Date, level: LogLevel, location: String, object: String) {
+        print(formatter.string(from: time) + " <" + level.rawValue + "> " + location + " " + object)
     }
 }

@@ -30,6 +30,7 @@ public final class DiskLogger: Logger {
     private let fileURL: URL
     private let fileSizeLimit: UInt64
     private let rotations: Int
+    private let formatter: DateFormatter
     private let queue = DispatchQueue(label: "com.wnagrodzki.DiskLogger", qos: .background, attributes: [], autoreleaseFrequency: .workItem, target: nil)
     private var buffer = Data()
     private var fileWriter: FileWriter!
@@ -44,10 +45,13 @@ public final class DiskLogger: Logger {
         self.fileURL = fileURL
         self.fileSizeLimit = fileSizeLimit
         self.rotations = rotations
+        formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd HH:mm:ss.SSS"
+        formatter.timeZone = TimeZone(secondsFromGMT: 0)
     }
     
-    public func log(time: String, level: LogLevel, location: String, object: String) {
-        let message = time + " <" + level.rawValue + "> " + location + " " + object + "\n"
+    public func log(time: Date, level: LogLevel, location: String, object: String) {
+        let message = formatter.string(from: time) + " <" + level.rawValue + "> " + location + " " + object + "\n"
         log(message)
     }
     

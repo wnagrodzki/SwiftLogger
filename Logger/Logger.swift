@@ -32,18 +32,11 @@ public protocol Logger {
     /// Do not call this method directly.
     ///
     /// - Parameters:
-    ///   - time: Part of the log message provided by `description(for date: Date)` method.
+    ///   - time: The date log method was called.
     ///   - level: The log level.
     ///   - location: Part of the log message provided by `description(for file: String, line: Int, function: String)` method.
     ///   - object: Part of the log message provided by `description(for object: Any)` method.
-    func log(time: String, level: LogLevel, location: String, object: String)
-    
-    /// Transforms `date` into textual representation which will be a part of the log message.
-    ///
-    /// Customization point. Default implementation returns date in format `"yyyy-MM-dd HH:mm:ss.SSS"`.
-    ///
-    /// - Parameter date: The date log method was called.
-    func description(for date: Date) -> String
+    func log(time: Date, level: LogLevel, location: String, object: String)
     
     /// Transforms passed parameters into location textual representation which will be a part of the log message.
     ///
@@ -95,17 +88,11 @@ extension Logger {
     ///   - function: **Do not provide a custom value.** The name of the declaration log method is called within.
     public func log(_ object: Any, level: LogLevel = .default, file: String = #file, line: Int = #line, function: String = #function) {
         let now = Date()
-        let time = description(for: now)
         let location = description(for: file, line: line, function: function)
         let objectDescription = description(for: object)
-        log(time: time, level: level, location: location, object: objectDescription)
+        log(time: now, level: level, location: location, object: objectDescription)
     }
-    
-    /// Returns date in format `"yyyy-MM-dd HH:mm:ss.SSS"`.
-    public func description(for date: Date) -> String {
-        return dateFormatter.string(from: date)
-    }
-    
+        
     /// Returns location in format `"<file name>:<line> <function>"`.
     public func description(for file: String, line: Int, function: String) -> String {
         return filename(fromFilePath: file) + ":\(line) \(function)"
@@ -123,10 +110,3 @@ extension Logger {
         return URL(fileURLWithPath: path).deletingPathExtension().lastPathComponent
     }
 }
-
-private let dateFormatter: DateFormatter = {
-    let formatter = DateFormatter()
-    formatter.dateFormat = "yyyy-MM-dd HH:mm:ss.SSS"
-    formatter.timeZone = TimeZone(secondsFromGMT: 0)
-    return formatter
-}()

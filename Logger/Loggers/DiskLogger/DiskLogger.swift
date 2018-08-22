@@ -50,8 +50,8 @@ public final class DiskLogger: Logger {
         formatter.timeZone = TimeZone(secondsFromGMT: 0)
     }
     
-    public func log(time: Date, level: LogLevel, location: String, object: String) {
-        let message = formatter.string(from: time) + " <" + level.logDescription + "> " + location + " " + object + "\n"
+    public func log(time: Date, level: LogLevel, location: String, message: @autoclosure () -> String) {
+        let message = formatter.string(from: time) + " <" + level.logDescription + "> " + location + " " + message() + "\n"
         log(message)
     }
     

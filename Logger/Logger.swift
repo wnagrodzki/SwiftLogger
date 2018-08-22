@@ -35,8 +35,8 @@ public protocol Logger {
     ///   - time: The date log method was called.
     ///   - level: The log level.
     ///   - location: Part of the log message provided by `description(for file: String, line: Int, function: String)` method.
-    ///   - object: Part of the log message provided by `description(for object: Any)` method.
-    func log(time: Date, level: LogLevel, location: String, object: String)
+    ///   - message: The message to be logged.
+    func log(time: Date, level: LogLevel, location: String, message: @autoclosure () -> String)
     
     /// Transforms passed parameters into location textual representation which will be a part of the log message.
     ///
@@ -47,14 +47,6 @@ public protocol Logger {
     ///   - line: The line number log method was called at.
     ///   - function: The name of the declaration log method was called within.
     func description(for file: String, line: Int, function: String) -> String
-    
-    /// Transforms `object` into textual representation which will be a part of the log message.
-    ///
-    /// Customization point. Default implementation returns `logDescription` for objects implementing `LogStringConvertible`,
-    /// or `String(describing:object)` otherwise.
-    ///
-    /// - Parameter object: The object to be logged.
-    func description(for object: Any) -> String
 }
 
 /// Log level controls the conditions under which a message should be logged.
@@ -107,29 +99,20 @@ extension Logger {
     /// Sends object to the logging system, optionally specifying a custom log level.
     ///
     /// - Parameters:
-    ///   - object: The object to be logged.
+    ///   - message: The message to be logged.
     ///   - level: The log level.
     ///   - file: **Do not provide a custom value.** The path to the file log method is called from.
     ///   - line: **Do not provide a custom value.** The line number log method is called at.
     ///   - function: **Do not provide a custom value.** The name of the declaration log method is called within.
-    public func log(_ object: Any, level: LogLevel, file: String = #file, line: Int = #line, function: String = #function) {
+    public func log(_ message: @autoclosure () -> String, level: LogLevel, file: String = #file, line: Int = #line, function: String = #function) {
         let now = Date()
         let location = description(for: file, line: line, function: function)
-        let objectDescription = description(for: object)
-        log(time: now, level: level, location: location, object: objectDescription)
+        log(time: now, level: level, location: location, message: message)
     }
         
     /// Returns location in format `"<file name>:<line> <function>"`.
     public func description(for file: String, line: Int, function: String) -> String {
         return filename(fromFilePath: file) + ":\(line) \(function)"
-    }
-    
-    /// Returns `logDescription` for objects implementing `LogStringConvertible`, or `String(describing:object)` otherwise.
-    public func description(for object: Any) -> String {
-        if let logStringConvertible = object as? LogStringConvertible {
-            return logStringConvertible.logDescription
-        }
-        return String(describing: object)
     }
     
     private func filename(fromFilePath path: String) -> String {

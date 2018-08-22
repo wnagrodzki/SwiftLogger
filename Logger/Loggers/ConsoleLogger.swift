@@ -36,6 +36,6 @@ public final class ConsoleLogger: Logger {
     }
     
     public func log(time: Date, level: LogLevel, location: String, object: String) {
-        print(formatter.string(from: time) + " <" + level.rawValue + "> " + location + " " + object)
+        print(formatter.string(from: time) + " <" + level.logDescription + "> " + location + " " + object)
     }
 }

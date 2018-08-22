@@ -58,22 +58,48 @@ public protocol Logger {
 }
 
 /// Log level controls the conditions under which a message should be logged.
-public enum LogLevel: String {
+/// - note: [RFC5424](https://www.rfc-editor.org/info/rfc5424)
+public enum LogLevel: Int {
     
-    /// Use this level to capture information about things that might result a failure.
-    case `default` = "Default"
+    /// System is unusable.
+    case emergency = 0
     
-    /// Use this level to capture information that may be helpful, but isn’t essential, for troubleshooting errors.
-    case info = "Info"
+    /// Action must be taken immediately.
+    case alert = 1
     
-    /// Use this level to capture information that may be useful during development or while troubleshooting a specific problem.
-    case debug = "Debug"
+    /// Critical conditions.
+    case critical = 2
     
-    /// Use this log level to capture process-level information to report errors in the process.
-    case error = "Error"
+    /// Error conditions.
+    case error = 3
     
-    /// Use this level to capture system-level or multi-process information to report system errors.
-    case fault = "Fault"
+    /// Warning conditions.
+    case warning = 4
+    
+    /// Normal but significant conditions.
+    case notice = 5
+    
+    /// Informational messages.
+    case informational = 6
+    
+    /// Debug-level messages.
+    case debug = 7
+}
+
+extension LogLevel: LogStringConvertible {
+    
+    public var logDescription: String {
+        switch self {
+        case .emergency: return "emerg"
+        case .alert: return "alert"
+        case .critical: return "crit"
+        case .error: return "err"
+        case .warning: return "warning"
+        case .notice: return "notice"
+        case .informational: return "info"
+        case .debug: return "debug"
+        }
+    }
 }
 
 extension Logger {
@@ -82,11 +108,11 @@ extension Logger {
     ///
     /// - Parameters:
     ///   - object: The object to be logged.
-    ///   - level: The log level. If unspecified, the `default` log level is used.
+    ///   - level: The log level.
     ///   - file: **Do not provide a custom value.** The path to the file log method is called from.
     ///   - line: **Do not provide a custom value.** The line number log method is called at.
     ///   - function: **Do not provide a custom value.** The name of the declaration log method is called within.
-    public func log(_ object: Any, level: LogLevel = .default, file: String = #file, line: Int = #line, function: String = #function) {
+    public func log(_ object: Any, level: LogLevel, file: String = #file, line: Int = #line, function: String = #function) {
         let now = Date()
         let location = description(for: file, line: line, function: function)
         let objectDescription = description(for: object)

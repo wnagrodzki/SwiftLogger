@@ -51,13 +51,13 @@ public final class DiskLogger: Logger {
     }
     
     public func log(time: Date, level: LogLevel, location: String, object: String) {
-        let message = formatter.string(from: time) + " <" + level.rawValue + "> " + location + " " + object + "\n"
+        let message = formatter.string(from: time) + " <" + level.logDescription + "> " + location + " " + object + "\n"
         log(message)
     }
     
     private func log(_ message: String) {
         guard let data = message.data(using: .utf8) else {
-            log("Message failed to convert to UTF8")
+            log("Message failed to convert to UTF8", level: .warning)
             return
         }
         queue.async {
@@ -73,7 +73,7 @@ public final class DiskLogger: Logger {
             }
             catch {
                 let message = String(describing: error)
-                self.log(message)
+                self.log(message, level: .warning)
             }
         }
     }

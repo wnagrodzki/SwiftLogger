@@ -35,7 +35,7 @@ public final class ConsoleLogger: Logger {
         formatter.timeZone = TimeZone(secondsFromGMT: 0)
     }
     
-    public func log(time: Date, level: LogLevel, location: String, object: String) {
-        print(formatter.string(from: time) + " <" + level.logDescription + "> " + location + " " + object)
+    public func log(time: Date, level: LogLevel, location: String, message: @autoclosure () -> String) {
+        print(formatter.string(from: time) + " <" + level.logDescription + "> " + location + " " + message())
     }
 }

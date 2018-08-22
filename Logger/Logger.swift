@@ -47,14 +47,6 @@ public protocol Logger {
     ///   - line: The line number log method was called at.
     ///   - function: The name of the declaration log method was called within.
     func description(for file: String, line: Int, function: String) -> String
-    
-    /// Transforms `object` into textual representation which will be a part of the log message.
-    ///
-    /// Customization point. Default implementation returns `logDescription` for objects implementing `LogStringConvertible`,
-    /// or `String(describing:object)` otherwise.
-    ///
-    /// - Parameter object: The object to be logged.
-    func description(for object: Any) -> String
 }
 
 /// Log level controls the conditions under which a message should be logged.
@@ -121,14 +113,6 @@ extension Logger {
     /// Returns location in format `"<file name>:<line> <function>"`.
     public func description(for file: String, line: Int, function: String) -> String {
         return filename(fromFilePath: file) + ":\(line) \(function)"
-    }
-    
-    /// Returns `logDescription` for objects implementing `LogStringConvertible`, or `String(describing:object)` otherwise.
-    public func description(for object: Any) -> String {
-        if let logStringConvertible = object as? LogStringConvertible {
-            return logStringConvertible.logDescription
-        }
-        return String(describing: object)
     }
     
     private func filename(fromFilePath path: String) -> String {

@@ -65,11 +65,13 @@ public final class DiskLogger: Logger {
             
             do {
                 try self.openFileWriter()
-                try self.writeBuffer()
-            }
-            catch is FileWriter.FileSizeLimitReached {
-                self.closeFileWriter()
-                try? self.rotateLogFiles()
+                do {
+                    try self.writeBuffer()
+                }
+                catch is FileWriter.FileSizeLimitReached {
+                    self.closeFileWriter()
+                    try self.rotateLogFiles()
+                }
             }
             catch {
                 let message = String(describing: error)

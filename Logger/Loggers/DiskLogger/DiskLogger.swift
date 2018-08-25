@@ -56,10 +56,7 @@ public final class DiskLogger: Logger {
     }
     
     private func log(_ message: String) {
-        guard let data = message.data(using: .utf8) else {
-            log("Message failed to convert to UTF8", level: .warning)
-            return
-        }
+        let data = Data(message.utf8)
         queue.async {
             self.buffer.append(data)
             

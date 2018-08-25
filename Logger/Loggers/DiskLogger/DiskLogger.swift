@@ -71,8 +71,9 @@ public final class DiskLogger: Logger {
                 }
             }
             catch {
-                let message = String(describing: error)
-                self.log(message, level: .warning)
+                let message = self.formatter.string(from: Date()) + " <" + LogLevel.warning.logDescription + "> " + String(describing: error)
+                let data = Data(message.utf8)
+                self.buffer.append(data)
             }
         }
     }

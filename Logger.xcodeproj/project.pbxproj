@@ -20,6 +20,7 @@
 		2EBF4B592122B598008E4117 /* Logrotate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EBF4B562122B598008E4117 /* Logrotate.swift */; };
 		2ED077D721329CA30058EEFC /* LoggetTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ED077D621329CA30058EEFC /* LoggetTests.swift */; };
 		2ED077D92132A4820058EEFC /* AgregateLoggerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ED077D82132A4820058EEFC /* AgregateLoggerTests.swift */; };
+		2ED077DB2132B0320058EEFC /* FileSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ED077DA2132B0320058EEFC /* FileSystem.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -62,6 +63,7 @@
 		2EBF4B562122B598008E4117 /* Logrotate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Logrotate.swift; sourceTree = "<group>"; };
 		2ED077D621329CA30058EEFC /* LoggetTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoggetTests.swift; sourceTree = "<group>"; };
 		2ED077D82132A4820058EEFC /* AgregateLoggerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgregateLoggerTests.swift; sourceTree = "<group>"; };
+		2ED077DA2132B0320058EEFC /* FileSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileSystem.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -142,6 +144,7 @@
 				2EBF4B562122B598008E4117 /* Logrotate.swift */,
 				2EBF4B4F2122B06E008E4117 /* NSFileHandle+Swift.h */,
 				2EBF4B502122B06E008E4117 /* NSFileHandle+Swift.m */,
+				2ED077DA2132B0320058EEFC /* FileSystem.swift */,
 			);
 			path = DiskLogger;
 			sourceTree = "<group>";
@@ -252,6 +255,7 @@
 				2EBF4B3E2122AA34008E4117 /* Logger.swift in Sources */,
 				2EBF4B512122B06E008E4117 /* NSFileHandle+Swift.m in Sources */,
 				2EBF4B4B2122AF53008E4117 /* ConsoleLogger.swift in Sources */,
+				2ED077DB2132B0320058EEFC /* FileSystem.swift in Sources */,
 				2EBF4B4A2122AF53008E4117 /* AgregateLogger.swift in Sources */,
 				2EBF4B592122B598008E4117 /* Logrotate.swift in Sources */,
 				2EBF4B452122ACD6008E4117 /* LogStringConvertible.swift in Sources */,

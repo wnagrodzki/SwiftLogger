@@ -30,6 +30,7 @@ public final class DiskLogger: Logger {
     private let fileURL: URL
     private let fileSizeLimit: UInt64
     private let rotations: Int
+    private let fileSystem: FileSystem
     private let formatter: DateFormatter
     private let queue = DispatchQueue(label: "com.wnagrodzki.DiskLogger", qos: .background, attributes: [], autoreleaseFrequency: .workItem, target: nil)
     private var buffer = Data()
@@ -41,10 +42,11 @@ public final class DiskLogger: Logger {
     ///   - fileURL: URL of the log file.
     ///   - fileSizeLimit: Maximum size log file can reach in bytes. Attempt to exceeding that limit triggers log files rotation.
     ///   - rotations: Number of times log files are rotated before being removed.
-    public init(fileURL: URL, fileSizeLimit: UInt64, rotations: Int) {
+    public init(fileURL: URL, fileSizeLimit: UInt64, rotations: Int, fileSystem: FileSystem) {
         self.fileURL = fileURL
         self.fileSizeLimit = fileSizeLimit
         self.rotations = rotations
+        self.fileSystem = fileSystem
         formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd HH:mm:ss.SSS"
         formatter.timeZone = TimeZone(secondsFromGMT: 0)
@@ -80,8 +82,8 @@ public final class DiskLogger: Logger {
     
     private func openFileWriter() throws {
         guard fileWriter == nil else { return }
-        if FileManager.default.fileExists(atPath: fileURL.path) == false {
-            FileManager.default.createFile(atPath: fileURL.path, contents: nil, attributes: nil)
+        if fileSystem.itemExists(at: fileURL) == false {
+            _ = fileSystem.createFile(at: fileURL)
         }
         fileWriter = try FileWriter(fileURL: fileURL, fileSizeLimit: fileSizeLimit)
     }
@@ -97,7 +99,7 @@ public final class DiskLogger: Logger {
     }
     
     private func rotateLogFiles() throws {
-        let logrotate = Logrotate(fileURL: fileURL, rotations: rotations, fileSystem: FileManager.default)
+        let logrotate = Logrotate(fileURL: fileURL, rotations: rotations, fileSystem: fileSystem)
         try logrotate.rotate()
     }
 }

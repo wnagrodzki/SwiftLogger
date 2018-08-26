@@ -24,15 +24,20 @@
 
 import Foundation
 
-protocol FileSystem {
+public protocol FileSystem {
     func itemExists(at URL: URL) -> Bool
     func removeItem(at URL: URL) throws
     func moveItem(at srcURL: URL, to dstURL: URL) throws
+    func createFile(at URL: URL) -> Bool
 }
 
 extension FileManager: FileSystem {
     
-    func itemExists(at URL: URL) -> Bool {
+    public func itemExists(at URL: URL) -> Bool {
         return fileExists(atPath: URL.path)
+    }
+    
+    public func createFile(at URL: URL) -> Bool {
+        return createFile(atPath: URL.path, contents: nil, attributes: nil)
     }
 }

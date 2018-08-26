@@ -24,6 +24,30 @@
 
 import Foundation
 
+/// Allows log files rotation.
+protocol Logrotate {
+    
+    /// Rotates log files `rotations` number of times.
+    ///
+    /// First deletes file at `<fileURL>.<rotations>`.
+    /// Next moves files located at:
+    ///
+    /// `<fileURL>, <fileURL>.1, <fileURL>.2 ... <fileURL>.<rotations - 1>`
+    ///
+    /// to `<fileURL>.1, <fileURL>.2 ... <fileURL>.<rotations>`
+    func rotate() throws
+}
+
+protocol LogrotateFactory {
+    
+    /// Returns newly initialized Logrotate instance.
+    ///
+    /// - Parameters:
+    ///   - fileURL: URL of the log file.
+    ///   - rotations: Number of times log files are rotated before being removed.
+    func makeInstance(fileURL: URL, rotations: Int) -> Logrotate
+}
+
 /// Logger that writes messages into the file at specified URL with log rotation support.
 public final class DiskLogger: Logger {
     
@@ -31,6 +55,7 @@ public final class DiskLogger: Logger {
     private let fileSizeLimit: UInt64
     private let rotations: Int
     private let fileSystem: FileSystem
+    private let logrotateFactory: LogrotateFactory
     private let formatter: DateFormatter
     private let queue = DispatchQueue(label: "com.wnagrodzki.DiskLogger", qos: .background, attributes: [], autoreleaseFrequency: .workItem, target: nil)
     private var buffer = Data()
@@ -42,11 +67,16 @@ public final class DiskLogger: Logger {
     ///   - fileURL: URL of the log file.
     ///   - fileSizeLimit: Maximum size log file can reach in bytes. Attempt to exceeding that limit triggers log files rotation.
     ///   - rotations: Number of times log files are rotated before being removed.
-    public init(fileURL: URL, fileSizeLimit: UInt64, rotations: Int, fileSystem: FileSystem) {
+    public convenience init(fileURL: URL, fileSizeLimit: UInt64, rotations: Int) {
+        self.init(fileURL: fileURL, fileSizeLimit: fileSizeLimit, rotations: rotations, fileSystem: FileManager.default, logrotateFactory: FileRotateFactory())
+    }
+    
+    init(fileURL: URL, fileSizeLimit: UInt64, rotations: Int, fileSystem: FileSystem, logrotateFactory: LogrotateFactory) {
         self.fileURL = fileURL
         self.fileSizeLimit = fileSizeLimit
         self.rotations = rotations
         self.fileSystem = fileSystem
+        self.logrotateFactory = logrotateFactory
         formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd HH:mm:ss.SSS"
         formatter.timeZone = TimeZone(secondsFromGMT: 0)
@@ -99,7 +129,13 @@ public final class DiskLogger: Logger {
     }
     
     private func rotateLogFiles() throws {
-        let logrotate = FileRotate(fileURL: fileURL, rotations: rotations, fileSystem: fileSystem)
+        let logrotate = logrotateFactory.makeInstance(fileURL: fileURL, rotations: rotations)
         try logrotate.rotate()
+    }
+}
+
+private class FileRotateFactory: LogrotateFactory {
+    func makeInstance(fileURL: URL, rotations: Int) -> Logrotate {
+        return FileRotate(fileURL: fileURL, rotations: rotations, fileSystem: FileManager.default)
     }
 }

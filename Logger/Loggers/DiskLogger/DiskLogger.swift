@@ -99,7 +99,7 @@ public final class DiskLogger: Logger {
     }
     
     private func rotateLogFiles() throws {
-        let logrotate = Logrotate(fileURL: fileURL, rotations: rotations, fileSystem: fileSystem)
+        let logrotate = FileRotate(fileURL: fileURL, rotations: rotations, fileSystem: fileSystem)
         try logrotate.rotate()
     }
 }

@@ -25,7 +25,7 @@
 import Foundation
 
 /// Allows log files rotation.
-final class Logrotate {
+final class FileRotate {
     
     private let fileURL: URL
     private let rotations: Int

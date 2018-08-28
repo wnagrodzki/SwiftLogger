@@ -27,9 +27,6 @@ import Foundation
 /// Allows writing to a file while respecting allowed size limit.
 final class FileWriter {
     
-    /// Write failed as allowed size limit would be exceeded for the file.
-    struct FileSizeLimitReached: Error {}
-    
     private let handle: FileHandle
     private let sizeLimit: UInt64
     private var currentSize: UInt64
@@ -45,22 +42,19 @@ final class FileWriter {
         self.sizeLimit = fileSizeLimit
         currentSize = handle.seekToEndOfFile()
     }
+}
+
+extension FileWriter: SizeLimitedFile {
     
-    /// Synchronously writes `data` at the end of the file.
-    ///
-    /// - Parameter data: The data to be written.
-    /// - Throws: Throws an error if no free space is left on the file system, or if any other writing error occurs.
-    ///           Throws `FileSizeLimitReached` if allowed size limit would be exceeded for the file.
     func write(_ data: Data) throws {
         let dataSize = UInt64(data.count)
         guard currentSize + dataSize <= sizeLimit else {
-            throw FileSizeLimitReached()
+            throw SizeLimitedFileQuotaReached()
         }
         try handle.swift_write(data)
         currentSize += dataSize
     }
     
-    /// Writes all in-memory data to permanent storage and closes the file.
     func synchronizeAndCloseFile() {
         handle.synchronizeFile()
         handle.closeFile()

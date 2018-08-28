@@ -24,10 +24,21 @@
 
 import Foundation
 
+protocol File {
+    func seekToEndOfFile() -> UInt64
+    func swift_write(_ data: Data) throws
+    func synchronizeFile()
+    func closeFile()
+}
+
+protocol FileFactory {
+    func makeInstance(forWritingTo: URL) throws -> File
+}
+
 /// Allows writing to a file while respecting allowed size limit.
 final class FileWriter {
     
-    private let handle: FileHandle
+    private let file: File
     private let sizeLimit: UInt64
     private var currentSize: UInt64
     
@@ -37,10 +48,10 @@ final class FileWriter {
     ///   - fileURL: URL of the file.
     ///   - fileSizeLimit: Maximum size the file can reach in bytes.
     /// - Throws: An error that may occur while the file is being opened for writing.
-    init(fileURL: URL, fileSizeLimit: UInt64) throws {
-        handle = try FileHandle(forWritingTo: fileURL)
+    init(fileURL: URL, fileSizeLimit: UInt64, fileFactory: FileFactory) throws {
+        file = try fileFactory.makeInstance(forWritingTo: fileURL)
         self.sizeLimit = fileSizeLimit
-        currentSize = handle.seekToEndOfFile()
+        currentSize = file.seekToEndOfFile()
     }
 }
 
@@ -51,12 +62,12 @@ extension FileWriter: SizeLimitedFile {
         guard currentSize + dataSize <= sizeLimit else {
             throw SizeLimitedFileQuotaReached()
         }
-        try handle.swift_write(data)
+        try file.swift_write(data)
         currentSize += dataSize
     }
     
     func synchronizeAndCloseFile() {
-        handle.synchronizeFile()
-        handle.closeFile()
+        file.synchronizeFile()
+        file.closeFile()
     }
 }

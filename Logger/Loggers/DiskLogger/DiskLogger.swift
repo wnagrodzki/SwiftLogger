@@ -130,10 +130,12 @@ public final class DiskLogger: Logger {
                 catch is SizeLimitedFileQuotaReached {
                     self.closeSizeLimitedFile()
                     try self.rotateLogFiles()
+                    try self.openSizeLimitedFile()
+                    try self.writeBuffer()
                 }
             }
             catch {
-                let message = self.formatter.string(from: Date()) + " <" + LogLevel.warning.logDescription + "> " + String(describing: error)
+                let message = self.formatter.string(from: Date()) + " <" + LogLevel.warning.logDescription + "> " + String(describing: error) + "\n"
                 let data = Data(message.utf8)
                 self.buffer.append(data)
             }

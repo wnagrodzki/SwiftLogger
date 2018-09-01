@@ -23,6 +23,7 @@
 		2ED077DB2132B0320058EEFC /* FileSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ED077DA2132B0320058EEFC /* FileSystem.swift */; };
 		2ED103E12135C61100EB3683 /* FileRotateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ED103E02135C61100EB3683 /* FileRotateTests.swift */; };
 		2ED103E32135D3FB00EB3683 /* FileWriterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ED103E22135D3FB00EB3683 /* FileWriterTests.swift */; };
+		2ED103E52138553B00EB3683 /* DiskLoggerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ED103E42138553B00EB3683 /* DiskLoggerTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -68,6 +69,7 @@
 		2ED077DA2132B0320058EEFC /* FileSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileSystem.swift; sourceTree = "<group>"; };
 		2ED103E02135C61100EB3683 /* FileRotateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileRotateTests.swift; sourceTree = "<group>"; };
 		2ED103E22135D3FB00EB3683 /* FileWriterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileWriterTests.swift; sourceTree = "<group>"; };
+		2ED103E42138553B00EB3683 /* DiskLoggerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiskLoggerTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -95,6 +97,7 @@
 				2E58D35C21316C3500BEF81A /* LogStringConvertibleTests.swift */,
 				2ED077D621329CA30058EEFC /* LoggetTests.swift */,
 				2ED077D82132A4820058EEFC /* AgregateLoggerTests.swift */,
+				2ED103E42138553B00EB3683 /* DiskLoggerTests.swift */,
 				2ED103E22135D3FB00EB3683 /* FileWriterTests.swift */,
 				2ED103E02135C61100EB3683 /* FileRotateTests.swift */,
 				2E58D35E21316C3500BEF81A /* Info.plist */,
@@ -247,6 +250,7 @@
 			files = (
 				2E58D35D21316C3500BEF81A /* LogStringConvertibleTests.swift in Sources */,
 				2ED103E32135D3FB00EB3683 /* FileWriterTests.swift in Sources */,
+				2ED103E52138553B00EB3683 /* DiskLoggerTests.swift in Sources */,
 				2ED077D92132A4820058EEFC /* AgregateLoggerTests.swift in Sources */,
 				2ED103E12135C61100EB3683 /* FileRotateTests.swift in Sources */,
 				2ED077D721329CA30058EEFC /* LoggetTests.swift in Sources */,

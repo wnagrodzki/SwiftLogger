@@ -70,6 +70,7 @@
 		2ED103E02135C61100EB3683 /* FileRotateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileRotateTests.swift; sourceTree = "<group>"; };
 		2ED103E22135D3FB00EB3683 /* FileWriterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileWriterTests.swift; sourceTree = "<group>"; };
 		2ED103E42138553B00EB3683 /* DiskLoggerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiskLoggerTests.swift; sourceTree = "<group>"; };
+		2EDA8AE8213ACCFF00FE5840 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -108,6 +109,7 @@
 		2EBF4B312122AA34008E4117 = {
 			isa = PBXGroup;
 			children = (
+				2EDA8AE8213ACCFF00FE5840 /* README.md */,
 				2EBF4B3C2122AA34008E4117 /* Logger */,
 				2E58D35B21316C3500BEF81A /* UnitTests */,
 				2EBF4B3B2122AA34008E4117 /* Products */,

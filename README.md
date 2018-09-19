@@ -1,4 +1,8 @@
 # SwiftLogger
+
+[![Build Status](https://travis-ci.org/wnagrodzki/SwiftLogger.svg?branch=master)](https://travis-ci.org/wnagrodzki/SwiftLogger)
+[![codecov](https://codecov.io/gh/wnagrodzki/SwiftLogger/branch/master/graph/badge.svg)](https://codecov.io/gh/wnagrodzki/SwiftLogger)
+
 Dependency free Logger API for Swift.
 
 ## Motivation

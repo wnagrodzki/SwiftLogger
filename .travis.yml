@@ -1,0 +1,5 @@
+language: swift
+osx_image: xcode10
+xcode_project: Logger.xcodeproj
+script: xcodebuild test -project Logger.xcodeproj -scheme Logger -destination 'platform=iOS Simulator,name=iPhone XS,OS=12.0'
+after_success: bash <(curl -s https://codecov.io/bash)

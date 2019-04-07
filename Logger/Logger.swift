@@ -107,7 +107,7 @@ extension Logger {
     public func log(_ message: @autoclosure () -> String, level: LogLevel, file: String = #file, line: Int = #line, function: String = #function) {
         let now = Date()
         let location = description(for: file, line: line, function: function)
-        log(time: now, level: level, location: location, message: message)
+        log(time: now, level: level, location: location, message: message())
     }
         
     /// Returns location in format `"<file name>:<line> <function>"`.

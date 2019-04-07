@@ -39,7 +39,7 @@ class FileWriterTests: XCTestCase {
     func testKeepingFileSizeLimit() throws {
         let factory = FileMockFactory()
         let writer = try FileWriter(fileURL: logURL, fileSizeLimit: 1, fileFactory: factory)
-        let data = Data(bytes: [0])
+        let data = Data([0])
         try writer.write(data)
         
         XCTAssertEqual(factory.mock.writtenData, data)
@@ -48,7 +48,7 @@ class FileWriterTests: XCTestCase {
     func testExceedingFileSizeLimit() throws {
         let factory = FileMockFactory()
         let writer = try FileWriter(fileURL: logURL, fileSizeLimit: 1, fileFactory: factory)
-        let data = Data(bytes: [0, 0])
+        let data = Data([0, 0])
         
         XCTAssertThrowsError(try writer.write(data), "file size limit exceeded") { (error) in
             XCTAssertTrue(error is SizeLimitedFileQuotaReached)

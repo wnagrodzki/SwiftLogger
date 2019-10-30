@@ -25,20 +25,20 @@
 import XCTest
 @testable import Logger
 
-class FileWriterTests: XCTestCase {
+class SizeLimitedFileTests: XCTestCase {
     
     let logURL = URL(fileURLWithPath: "/var/log/application.log")
     
     func testFileOpeningFailure() {
         let factory = UnopenableFileFactory()
-        XCTAssertThrowsError(try FileWriter(fileURL: logURL, fileSizeLimit: 0, fileFactory: factory), "file open failure") { (error) in
+        XCTAssertThrowsError(try SizeLimitedFileImpl(fileURL: logURL, fileSizeLimit: 0, fileFactory: factory), "file open failure") { (error) in
             XCTAssertTrue(error is UnopenableFileFactory.OpenFileError)
         }
     }
     
     func testKeepingFileSizeLimit() throws {
         let factory = FileMockFactory()
-        let writer = try FileWriter(fileURL: logURL, fileSizeLimit: 1, fileFactory: factory)
+        let writer = try SizeLimitedFileImpl(fileURL: logURL, fileSizeLimit: 1, fileFactory: factory)
         let data = Data([0])
         try writer.write(data)
         
@@ -47,7 +47,7 @@ class FileWriterTests: XCTestCase {
     
     func testExceedingFileSizeLimit() throws {
         let factory = FileMockFactory()
-        let writer = try FileWriter(fileURL: logURL, fileSizeLimit: 1, fileFactory: factory)
+        let writer = try SizeLimitedFileImpl(fileURL: logURL, fileSizeLimit: 1, fileFactory: factory)
         let data = Data([0, 0])
         
         XCTAssertThrowsError(try writer.write(data), "file size limit exceeded") { (error) in
@@ -59,7 +59,7 @@ class FileWriterTests: XCTestCase {
     
     func testSynchronizingAndClosingFile() throws {
         let factory = FileMockFactory()
-        let writer = try FileWriter(fileURL: logURL, fileSizeLimit: 1, fileFactory: factory)
+        let writer = try SizeLimitedFileImpl(fileURL: logURL, fileSizeLimit: 1, fileFactory: factory)
         writer.synchronizeAndCloseFile()
         XCTAssertTrue(factory.mock.synchronizeFileCallCount == 1 && factory.mock.closeFileCallCount == 1)
     }

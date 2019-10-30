@@ -42,18 +42,18 @@ final class LogrotateImpl {
     
     private let fileURL: URL
     private let rotations: Int
-    private let fileSystem: FileSystem
+    private let fileManager: OSFileManager
     
     /// Initializes new Logrotate instance.
     ///
     /// - Parameters:
     ///   - fileURL: URL of the log file.
     ///   - rotations: Number of times log files are rotated before being removed.
-    init(fileURL: URL, rotations: Int, fileSystem: FileSystem) {
+    init(fileURL: URL, rotations: Int, fileManager: OSFileManager) {
         precondition(rotations > 0)
         self.fileURL = fileURL
         self.rotations = rotations
-        self.fileSystem = fileSystem
+        self.fileManager = fileManager
     }
 }
 
@@ -68,12 +68,12 @@ extension LogrotateImpl: Logrotate {
         let toDelete = rotatedURLs.last!
         let toMove = zip(allURLs, rotatedURLs).reversed()
         
-        if fileSystem.itemExists(at: toDelete) {
-            try fileSystem.removeItem(at: toDelete)
+        if fileManager.itemExists(at: toDelete) {
+            try fileManager.removeItem(at: toDelete)
         }
         for (oldURL, newURL) in toMove {
-            guard fileSystem.itemExists(at: oldURL) else { continue }
-            try fileSystem.moveItem(at: oldURL, to: newURL)
+            guard fileManager.itemExists(at: oldURL) else { continue }
+            try fileManager.moveItem(at: oldURL, to: newURL)
         }
     }
 }

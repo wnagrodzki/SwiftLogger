@@ -51,7 +51,7 @@ public final class DiskLogger: Logger {
     private let fileURL: URL
     private let fileSizeLimit: UInt64
     private let rotations: Int
-    private let fileSystem: FileSystem
+    private let fileManager: OSFileManager
     private let sizeLimitedFileFactory: SizeLimitedFileFactory
     private let logrotateFactory: LogrotateFactory
     private let formatter: DateFormatter
@@ -66,14 +66,14 @@ public final class DiskLogger: Logger {
     ///   - fileSizeLimit: Maximum size log file can reach in bytes. Attempt to exceeding that limit triggers log files rotation.
     ///   - rotations: Number of times log files are rotated before being removed.
     public convenience init(fileURL: URL, fileSizeLimit: UInt64, rotations: Int) {
-        self.init(fileURL: fileURL, fileSizeLimit: fileSizeLimit, rotations: rotations, fileSystem: FileManager.default, sizeLimitedFileFactory: FileWriterFactory(),  logrotateFactory: FileRotateFactory())
+        self.init(fileURL: fileURL, fileSizeLimit: fileSizeLimit, rotations: rotations, fileManager: FileManager.default, sizeLimitedFileFactory: FileWriterFactory(),  logrotateFactory: FileRotateFactory())
     }
     
-    init(fileURL: URL, fileSizeLimit: UInt64, rotations: Int, fileSystem: FileSystem, sizeLimitedFileFactory: SizeLimitedFileFactory, logrotateFactory: LogrotateFactory) {
+    init(fileURL: URL, fileSizeLimit: UInt64, rotations: Int, fileManager: OSFileManager, sizeLimitedFileFactory: SizeLimitedFileFactory, logrotateFactory: LogrotateFactory) {
         self.fileURL = fileURL
         self.fileSizeLimit = fileSizeLimit
         self.rotations = rotations
-        self.fileSystem = fileSystem
+        self.fileManager = fileManager
         self.sizeLimitedFileFactory = sizeLimitedFileFactory
         self.logrotateFactory = logrotateFactory
         formatter = DateFormatter()
@@ -113,8 +113,8 @@ public final class DiskLogger: Logger {
     
     private func openSizeLimitedFile() throws {
         guard sizeLimitedFile == nil else { return }
-        if fileSystem.itemExists(at: fileURL) == false {
-            _ = fileSystem.createFile(at: fileURL)
+        if fileManager.itemExists(at: fileURL) == false {
+            _ = fileManager.createFile(at: fileURL)
         }
         sizeLimitedFile = try sizeLimitedFileFactory.makeInstance(fileURL: fileURL, fileSizeLimit: fileSizeLimit)
     }
@@ -137,7 +137,7 @@ public final class DiskLogger: Logger {
 
 private class FileRotateFactory: LogrotateFactory {
     func makeInstance(fileURL: URL, rotations: Int) -> Logrotate {
-        return LogrotateImpl(fileURL: fileURL, rotations: rotations, fileSystem: FileManager.default)
+        return LogrotateImpl(fileURL: fileURL, rotations: rotations, fileManager: FileManager.default)
     }
 }
 

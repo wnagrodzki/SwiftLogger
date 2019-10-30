@@ -19,7 +19,7 @@
 		2EBF4B592122B598008E4117 /* Logrotate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EBF4B562122B598008E4117 /* Logrotate.swift */; };
 		2ED077D721329CA30058EEFC /* LoggetTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ED077D621329CA30058EEFC /* LoggetTests.swift */; };
 		2ED077D92132A4820058EEFC /* AgregateLoggerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ED077D82132A4820058EEFC /* AgregateLoggerTests.swift */; };
-		2ED077DB2132B0320058EEFC /* FileSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ED077DA2132B0320058EEFC /* FileSystem.swift */; };
+		2ED077DB2132B0320058EEFC /* OSFileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ED077DA2132B0320058EEFC /* OSFileManager.swift */; };
 		2ED103E12135C61100EB3683 /* LogrotateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ED103E02135C61100EB3683 /* LogrotateTests.swift */; };
 		2ED103E32135D3FB00EB3683 /* SizeLimitedFileTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ED103E22135D3FB00EB3683 /* SizeLimitedFileTests.swift */; };
 		2ED103E52138553B00EB3683 /* DiskLoggerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ED103E42138553B00EB3683 /* DiskLoggerTests.swift */; };
@@ -62,7 +62,7 @@
 		2EBF4B562122B598008E4117 /* Logrotate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Logrotate.swift; sourceTree = "<group>"; };
 		2ED077D621329CA30058EEFC /* LoggetTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoggetTests.swift; sourceTree = "<group>"; };
 		2ED077D82132A4820058EEFC /* AgregateLoggerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgregateLoggerTests.swift; sourceTree = "<group>"; };
-		2ED077DA2132B0320058EEFC /* FileSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileSystem.swift; sourceTree = "<group>"; };
+		2ED077DA2132B0320058EEFC /* OSFileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OSFileManager.swift; sourceTree = "<group>"; };
 		2ED103E02135C61100EB3683 /* LogrotateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogrotateTests.swift; sourceTree = "<group>"; };
 		2ED103E22135D3FB00EB3683 /* SizeLimitedFileTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SizeLimitedFileTests.swift; sourceTree = "<group>"; };
 		2ED103E42138553B00EB3683 /* DiskLoggerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiskLoggerTests.swift; sourceTree = "<group>"; };
@@ -148,7 +148,7 @@
 				2EBF4B542122B598008E4117 /* DiskLogger.swift */,
 				2EBF4B552122B598008E4117 /* SizeLimitedFile.swift */,
 				2EBF4B562122B598008E4117 /* Logrotate.swift */,
-				2ED077DA2132B0320058EEFC /* FileSystem.swift */,
+				2ED077DA2132B0320058EEFC /* OSFileManager.swift */,
 			);
 			path = DiskLogger;
 			sourceTree = "<group>";
@@ -263,7 +263,7 @@
 				2EBF4B4C2122AF53008E4117 /* NullLogger.swift in Sources */,
 				2EBF4B3E2122AA34008E4117 /* Logger.swift in Sources */,
 				2EBF4B4B2122AF53008E4117 /* ConsoleLogger.swift in Sources */,
-				2ED077DB2132B0320058EEFC /* FileSystem.swift in Sources */,
+				2ED077DB2132B0320058EEFC /* OSFileManager.swift in Sources */,
 				2EBF4B4A2122AF53008E4117 /* AgregateLogger.swift in Sources */,
 				2EBF4B592122B598008E4117 /* Logrotate.swift in Sources */,
 				2EBF4B452122ACD6008E4117 /* LogStringConvertible.swift in Sources */,

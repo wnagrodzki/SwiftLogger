@@ -69,7 +69,7 @@ private class UnopenableFileFactory: FileFactory {
     
     struct OpenFileError: Error {}
     
-    func makeInstance(forWritingTo: URL) throws -> File {
+    func makeInstance(forWritingTo: URL) throws -> OSFileHandle {
         throw OpenFileError()
     }
 }
@@ -78,12 +78,12 @@ private class FileMockFactory: FileFactory {
     
     let mock = FileMock()
     
-    func makeInstance(forWritingTo: URL) throws -> File {
+    func makeInstance(forWritingTo: URL) throws -> OSFileHandle {
         return mock
     }
 }
 
-private class FileMock: File {
+private class FileMock: OSFileHandle {
     
     private(set) var writtenData = Data()
     private(set) var synchronizeFileCallCount = 0

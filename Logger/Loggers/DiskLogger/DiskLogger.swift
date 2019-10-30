@@ -24,23 +24,6 @@
 
 import Foundation
 
-/// Write failed as allowed size limit would be exceeded.
-public struct SizeLimitedFileQuotaReached: Error {}
-
-/// Allows writing to a file while respecting allowed size limit.
-protocol SizeLimitedFile {
-    
-    /// Synchronously writes `data` at the end of the file.
-    ///
-    /// - Parameter data: The data to be written.
-    /// - Throws: Throws an error if no free space is left on the file system, or if any other writing error occurs.
-    ///           Throws `SizeLimitedFileQuotaReached` if allowed size limit would be exceeded.
-    func write(_ data: Data) throws
-    
-    /// Writes all in-memory data to permanent storage and closes the file.
-    func synchronizeAndCloseFile()
-}
-
 protocol SizeLimitedFileFactory {
     
     /// Returns newly initialized SizeLimitedFile instance.
@@ -50,20 +33,6 @@ protocol SizeLimitedFileFactory {
     ///   - fileSizeLimit: Maximum size the file can reach in bytes.
     /// - Throws: An error that may occur while the file is being opened for writing.
     func makeInstance(fileURL: URL, fileSizeLimit: UInt64) throws -> SizeLimitedFile
-}
-
-/// Allows log files rotation.
-protocol Logrotate {
-    
-    /// Rotates log files `rotations` number of times.
-    ///
-    /// First deletes file at `<fileURL>.<rotations>`.
-    /// Next moves files located at:
-    ///
-    /// `<fileURL>, <fileURL>.1, <fileURL>.2 ... <fileURL>.<rotations - 1>`
-    ///
-    /// to `<fileURL>.1, <fileURL>.2 ... <fileURL>.<rotations>`
-    func rotate() throws
 }
 
 protocol LogrotateFactory {
@@ -82,7 +51,7 @@ public final class DiskLogger: Logger {
     private let fileURL: URL
     private let fileSizeLimit: UInt64
     private let rotations: Int
-    private let fileSystem: FileSystem
+    private let fileManager: OSFileManager
     private let sizeLimitedFileFactory: SizeLimitedFileFactory
     private let logrotateFactory: LogrotateFactory
     private let formatter: DateFormatter
@@ -97,14 +66,14 @@ public final class DiskLogger: Logger {
     ///   - fileSizeLimit: Maximum size log file can reach in bytes. Attempt to exceeding that limit triggers log files rotation.
     ///   - rotations: Number of times log files are rotated before being removed.
     public convenience init(fileURL: URL, fileSizeLimit: UInt64, rotations: Int) {
-        self.init(fileURL: fileURL, fileSizeLimit: fileSizeLimit, rotations: rotations, fileSystem: FileManager.default, sizeLimitedFileFactory: FileWriterFactory(),  logrotateFactory: FileRotateFactory())
+        self.init(fileURL: fileURL, fileSizeLimit: fileSizeLimit, rotations: rotations, fileManager: FileManager.default, sizeLimitedFileFactory: SizeLimitedFileFactoryImpl(),  logrotateFactory: LogrotateFactoryImpl())
     }
     
-    init(fileURL: URL, fileSizeLimit: UInt64, rotations: Int, fileSystem: FileSystem, sizeLimitedFileFactory: SizeLimitedFileFactory, logrotateFactory: LogrotateFactory) {
+    init(fileURL: URL, fileSizeLimit: UInt64, rotations: Int, fileManager: OSFileManager, sizeLimitedFileFactory: SizeLimitedFileFactory, logrotateFactory: LogrotateFactory) {
         self.fileURL = fileURL
         self.fileSizeLimit = fileSizeLimit
         self.rotations = rotations
-        self.fileSystem = fileSystem
+        self.fileManager = fileManager
         self.sizeLimitedFileFactory = sizeLimitedFileFactory
         self.logrotateFactory = logrotateFactory
         formatter = DateFormatter()
@@ -144,8 +113,8 @@ public final class DiskLogger: Logger {
     
     private func openSizeLimitedFile() throws {
         guard sizeLimitedFile == nil else { return }
-        if fileSystem.itemExists(at: fileURL) == false {
-            _ = fileSystem.createFile(at: fileURL)
+        if fileManager.itemExists(at: fileURL) == false {
+            _ = fileManager.createFile(at: fileURL)
         }
         sizeLimitedFile = try sizeLimitedFileFactory.makeInstance(fileURL: fileURL, fileSizeLimit: fileSizeLimit)
     }
@@ -166,27 +135,20 @@ public final class DiskLogger: Logger {
     }
 }
 
-private class FileRotateFactory: LogrotateFactory {
+private class LogrotateFactoryImpl: LogrotateFactory {
     func makeInstance(fileURL: URL, rotations: Int) -> Logrotate {
-        return FileRotate(fileURL: fileURL, rotations: rotations, fileSystem: FileManager.default)
+        return LogrotateImpl(fileURL: fileURL, rotations: rotations, fileManager: FileManager.default)
     }
 }
 
-private class FileWriterFactory: SizeLimitedFileFactory {
+private class SizeLimitedFileFactoryImpl: SizeLimitedFileFactory {
     func makeInstance(fileURL: URL, fileSizeLimit: UInt64) throws -> SizeLimitedFile {
-        return try FileWriter(fileURL: fileURL, fileSizeLimit: fileSizeLimit, fileFactory: FileHandleFactory())
+        return try SizeLimitedFileImpl(fileURL: fileURL, fileSizeLimit: fileSizeLimit, fileFactory: FileHandleFactoryImpl())
     }
 }
 
-private class FileHandleFactory: FileFactory {
-    func makeInstance(forWritingTo: URL) throws -> File {
+private class FileHandleFactoryImpl: FileHandleFactory {
+    func makeInstance(forWritingTo: URL) throws -> OSFileHandle {
         return try FileHandle(forWritingTo: forWritingTo)
-    }
-}
-
-extension FileHandle: File {
-    
-    func swift_write(_ data: Data) throws {
-        try __write(data, error: ())
     }
 }

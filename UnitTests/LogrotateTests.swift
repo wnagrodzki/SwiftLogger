@@ -25,7 +25,7 @@
 import XCTest
 @testable import Logger
 
-class FileRotateTests: XCTestCase {
+class LogrotateTests: XCTestCase {
     
     let logURL = URL(fileURLWithPath: "/var/log/application.log")
     let log1URL = URL(fileURLWithPath: "/var/log/application.log.1")
@@ -34,7 +34,7 @@ class FileRotateTests: XCTestCase {
     
     func test_1rotation_0files() {
         let fileSystem = FileSystemMock(files: [])
-        let logrotate = FileRotate(fileURL: logURL, rotations: 1, fileSystem: fileSystem)
+        let logrotate = LogrotateImpl(fileURL: logURL, rotations: 1, fileSystem: fileSystem)
         try? logrotate.rotate()
         
         let actual = fileSystem.files
@@ -44,7 +44,7 @@ class FileRotateTests: XCTestCase {
     
     func test_1rotation_1file() {
         let fileSystem = FileSystemMock(files: [logURL])
-        let logrotate = FileRotate(fileURL: logURL, rotations: 1, fileSystem: fileSystem)
+        let logrotate = LogrotateImpl(fileURL: logURL, rotations: 1, fileSystem: fileSystem)
         try? logrotate.rotate()
         
         let actual = fileSystem.files
@@ -54,7 +54,7 @@ class FileRotateTests: XCTestCase {
     
     func test_1rotation_2files() {
         let fileSystem = FileSystemMock(files: [logURL, log1URL])
-        let logrotate = FileRotate(fileURL: logURL, rotations: 1, fileSystem: fileSystem)
+        let logrotate = LogrotateImpl(fileURL: logURL, rotations: 1, fileSystem: fileSystem)
         try? logrotate.rotate()
         
         let actual = fileSystem.files
@@ -64,7 +64,7 @@ class FileRotateTests: XCTestCase {
     
     func test_1rotation_3files() {
         let fileSystem = FileSystemMock(files: [logURL, log1URL, log2URL])
-        let logrotate = FileRotate(fileURL: logURL, rotations: 1, fileSystem: fileSystem)
+        let logrotate = LogrotateImpl(fileURL: logURL, rotations: 1, fileSystem: fileSystem)
         try? logrotate.rotate()
         
         let actual = fileSystem.files
@@ -74,7 +74,7 @@ class FileRotateTests: XCTestCase {
     
     func test_2rotations_0files() {
         let fileSystem = FileSystemMock(files: [])
-        let logrotate = FileRotate(fileURL: logURL, rotations: 2, fileSystem: fileSystem)
+        let logrotate = LogrotateImpl(fileURL: logURL, rotations: 2, fileSystem: fileSystem)
         try? logrotate.rotate()
         
         let actual = fileSystem.files
@@ -84,7 +84,7 @@ class FileRotateTests: XCTestCase {
     
     func test_2rotations_1file() {
         let fileSystem = FileSystemMock(files: [logURL])
-        let logrotate = FileRotate(fileURL: logURL, rotations: 2, fileSystem: fileSystem)
+        let logrotate = LogrotateImpl(fileURL: logURL, rotations: 2, fileSystem: fileSystem)
         try? logrotate.rotate()
         
         let actual = fileSystem.files
@@ -94,7 +94,7 @@ class FileRotateTests: XCTestCase {
     
     func test_2rotations_2files() {
         let fileSystem = FileSystemMock(files: [logURL, log1URL])
-        let logrotate = FileRotate(fileURL: logURL, rotations: 2, fileSystem: fileSystem)
+        let logrotate = LogrotateImpl(fileURL: logURL, rotations: 2, fileSystem: fileSystem)
         try? logrotate.rotate()
         
         let actual = fileSystem.files
@@ -104,7 +104,7 @@ class FileRotateTests: XCTestCase {
     
     func test_2rotations_3files() {
         let fileSystem = FileSystemMock(files: [logURL, log1URL, log2URL])
-        let logrotate = FileRotate(fileURL: logURL, rotations: 2, fileSystem: fileSystem)
+        let logrotate = LogrotateImpl(fileURL: logURL, rotations: 2, fileSystem: fileSystem)
         try? logrotate.rotate()
         
         let actual = fileSystem.files
@@ -114,7 +114,7 @@ class FileRotateTests: XCTestCase {
     
     func test_2rotations_4files() {
         let fileSystem = FileSystemMock(files: [logURL, log1URL, log2URL, log3URL])
-        let logrotate = FileRotate(fileURL: logURL, rotations: 2, fileSystem: fileSystem)
+        let logrotate = LogrotateImpl(fileURL: logURL, rotations: 2, fileSystem: fileSystem)
         try? logrotate.rotate()
         
         let actual = fileSystem.files
@@ -124,7 +124,7 @@ class FileRotateTests: XCTestCase {
     
     func testErrorPropagation() {
         let fileSystem = BrokenFileSystem()
-        let logrotate = FileRotate(fileURL: logURL, rotations: 1, fileSystem: fileSystem)
+        let logrotate = LogrotateImpl(fileURL: logURL, rotations: 1, fileSystem: fileSystem)
         
         XCTAssertThrowsError(try logrotate.rotate(), "An error when removing or moving an item") { (error) in
             XCTAssertTrue(error is BrokenFileSystem.IOError)

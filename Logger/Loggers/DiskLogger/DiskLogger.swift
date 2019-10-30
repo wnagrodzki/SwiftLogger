@@ -35,20 +35,6 @@ protocol SizeLimitedFileFactory {
     func makeInstance(fileURL: URL, fileSizeLimit: UInt64) throws -> SizeLimitedFile
 }
 
-/// Allows log files rotation.
-protocol Logrotate {
-    
-    /// Rotates log files `rotations` number of times.
-    ///
-    /// First deletes file at `<fileURL>.<rotations>`.
-    /// Next moves files located at:
-    ///
-    /// `<fileURL>, <fileURL>.1, <fileURL>.2 ... <fileURL>.<rotations - 1>`
-    ///
-    /// to `<fileURL>.1, <fileURL>.2 ... <fileURL>.<rotations>`
-    func rotate() throws
-}
-
 protocol LogrotateFactory {
     
     /// Returns newly initialized Logrotate instance.
@@ -151,7 +137,7 @@ public final class DiskLogger: Logger {
 
 private class FileRotateFactory: LogrotateFactory {
     func makeInstance(fileURL: URL, rotations: Int) -> Logrotate {
-        return FileRotate(fileURL: fileURL, rotations: rotations, fileSystem: FileManager.default)
+        return LogrotateImpl(fileURL: fileURL, rotations: rotations, fileSystem: FileManager.default)
     }
 }
 

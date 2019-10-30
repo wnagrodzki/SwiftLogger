@@ -24,7 +24,21 @@
 
 import Foundation
 
-final class FileRotate {
+/// Allows log files rotation.
+protocol Logrotate {
+    
+    /// Rotates log files `rotations` number of times.
+    ///
+    /// First deletes file at `<fileURL>.<rotations>`.
+    /// Next moves files located at:
+    ///
+    /// `<fileURL>, <fileURL>.1, <fileURL>.2 ... <fileURL>.<rotations - 1>`
+    ///
+    /// to `<fileURL>.1, <fileURL>.2 ... <fileURL>.<rotations>`
+    func rotate() throws
+}
+
+final class LogrotateImpl {
     
     private let fileURL: URL
     private let rotations: Int
@@ -43,7 +57,7 @@ final class FileRotate {
     }
 }
 
-extension FileRotate: Logrotate {
+extension LogrotateImpl: Logrotate {
     
     func rotate() throws {
         let range = 1...rotations

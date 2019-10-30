@@ -33,13 +33,13 @@ class DiskLoggerTests: XCTestCase {
         let expectation = XCTestExpectation(description: "write(_:) was called on SizeLimitedFile")
         expectation.expectedFulfillmentCount = 1
         
-        let filesystem = FileSystemStub()
+        let fimeManager = FileManagerStub()
         let sizeLimitedFileFactory = SizeLimitedFileMockFactory(writeCall: expectation)
         let logrotateFactory = LogrotateMockFactory()
         let logger = DiskLogger(fileURL: logURL,
                                 fileSizeLimit: 1024,
                                 rotations: 1,
-                                fileSystem: filesystem,
+                                fileManager: fimeManager,
                                 sizeLimitedFileFactory: sizeLimitedFileFactory,
                                 logrotateFactory: logrotateFactory)
         
@@ -61,13 +61,13 @@ class DiskLoggerTests: XCTestCase {
         let expectation = XCTestExpectation(description: "write(_:) was called on SizeLimitedFile")
         expectation.expectedFulfillmentCount = 2
         
-        let filesystem = FileSystemStub()
+        let fimeManager = FileManagerStub()
         let sizeLimitedFileFactory = SizeLimitedFileMockFactory(writeCall: expectation)
         let logrotateFactory = LogrotateMockFactory()
         let logger = DiskLogger(fileURL: logURL,
                                 fileSizeLimit: 91,
                                 rotations: 1,
-                                fileSystem: filesystem,
+                                fileManager: fimeManager,
                                 sizeLimitedFileFactory: sizeLimitedFileFactory,
                                 logrotateFactory: logrotateFactory)
         
@@ -90,13 +90,13 @@ class DiskLoggerTests: XCTestCase {
         let expectation = XCTestExpectation(description: "write(_:) was called on SizeLimitedFile")
         expectation.expectedFulfillmentCount = 2
         
-        let filesystem = FileSystemStub()
+        let fimeManager = FileManagerStub()
         let sizeLimitedFileFactory = UnwritableFileStubFactory(writeCall: expectation)
         let logrotateFactory = LogrotateMockFactory()
         let logger = DiskLogger(fileURL: logURL,
                                 fileSizeLimit: 91,
                                 rotations: 1,
-                                fileSystem: filesystem,
+                                fileManager: fimeManager,
                                 sizeLimitedFileFactory: sizeLimitedFileFactory,
                                 logrotateFactory: logrotateFactory)
         
@@ -116,7 +116,7 @@ class DiskLoggerTests: XCTestCase {
     }
 }
 
-private class FileSystemStub: FileSystem {
+private class FileManagerStub: OSFileManager {
     func itemExists(at URL: URL) -> Bool {
         return false
     }

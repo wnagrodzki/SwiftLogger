@@ -25,7 +25,7 @@
 import XCTest
 @testable import Logger
 
-class FileRotateTests: XCTestCase {
+class LogrotateTests: XCTestCase {
     
     let logURL = URL(fileURLWithPath: "/var/log/application.log")
     let log1URL = URL(fileURLWithPath: "/var/log/application.log.1")
@@ -33,98 +33,98 @@ class FileRotateTests: XCTestCase {
     let log3URL = URL(fileURLWithPath: "/var/log/application.log.3")
     
     func test_1rotation_0files() {
-        let fileSystem = FileSystemMock(files: [])
-        let logrotate = FileRotate(fileURL: logURL, rotations: 1, fileSystem: fileSystem)
+        let fimeManager = FileManagerMock(files: [])
+        let logrotate = LogrotateImpl(fileURL: logURL, rotations: 1, fileManager: fimeManager)
         try? logrotate.rotate()
         
-        let actual = fileSystem.files
+        let actual = fimeManager.files
         let expected = Set<URL>()
         XCTAssertEqual(actual, expected)
     }
     
     func test_1rotation_1file() {
-        let fileSystem = FileSystemMock(files: [logURL])
-        let logrotate = FileRotate(fileURL: logURL, rotations: 1, fileSystem: fileSystem)
+        let fimeManager = FileManagerMock(files: [logURL])
+        let logrotate = LogrotateImpl(fileURL: logURL, rotations: 1, fileManager: fimeManager)
         try? logrotate.rotate()
         
-        let actual = fileSystem.files
+        let actual = fimeManager.files
         let expected = Set<URL>([log1URL])
         XCTAssertEqual(actual, expected)
     }
     
     func test_1rotation_2files() {
-        let fileSystem = FileSystemMock(files: [logURL, log1URL])
-        let logrotate = FileRotate(fileURL: logURL, rotations: 1, fileSystem: fileSystem)
+        let fimeManager = FileManagerMock(files: [logURL, log1URL])
+        let logrotate = LogrotateImpl(fileURL: logURL, rotations: 1, fileManager: fimeManager)
         try? logrotate.rotate()
         
-        let actual = fileSystem.files
+        let actual = fimeManager.files
         let expected = Set<URL>([log1URL])
         XCTAssertEqual(actual, expected)
     }
     
     func test_1rotation_3files() {
-        let fileSystem = FileSystemMock(files: [logURL, log1URL, log2URL])
-        let logrotate = FileRotate(fileURL: logURL, rotations: 1, fileSystem: fileSystem)
+        let fimeManager = FileManagerMock(files: [logURL, log1URL, log2URL])
+        let logrotate = LogrotateImpl(fileURL: logURL, rotations: 1, fileManager: fimeManager)
         try? logrotate.rotate()
         
-        let actual = fileSystem.files
+        let actual = fimeManager.files
         let expected = Set<URL>([log1URL, log2URL])
         XCTAssertEqual(actual, expected)
     }
     
     func test_2rotations_0files() {
-        let fileSystem = FileSystemMock(files: [])
-        let logrotate = FileRotate(fileURL: logURL, rotations: 2, fileSystem: fileSystem)
+        let fimeManager = FileManagerMock(files: [])
+        let logrotate = LogrotateImpl(fileURL: logURL, rotations: 2, fileManager: fimeManager)
         try? logrotate.rotate()
         
-        let actual = fileSystem.files
+        let actual = fimeManager.files
         let expected = Set<URL>()
         XCTAssertEqual(actual, expected)
     }
     
     func test_2rotations_1file() {
-        let fileSystem = FileSystemMock(files: [logURL])
-        let logrotate = FileRotate(fileURL: logURL, rotations: 2, fileSystem: fileSystem)
+        let fimeManager = FileManagerMock(files: [logURL])
+        let logrotate = LogrotateImpl(fileURL: logURL, rotations: 2, fileManager: fimeManager)
         try? logrotate.rotate()
         
-        let actual = fileSystem.files
+        let actual = fimeManager.files
         let expected = Set<URL>([log1URL])
         XCTAssertEqual(actual, expected)
     }
     
     func test_2rotations_2files() {
-        let fileSystem = FileSystemMock(files: [logURL, log1URL])
-        let logrotate = FileRotate(fileURL: logURL, rotations: 2, fileSystem: fileSystem)
+        let fimeManager = FileManagerMock(files: [logURL, log1URL])
+        let logrotate = LogrotateImpl(fileURL: logURL, rotations: 2, fileManager: fimeManager)
         try? logrotate.rotate()
         
-        let actual = fileSystem.files
+        let actual = fimeManager.files
         let expected = Set<URL>([log1URL, log2URL])
         XCTAssertEqual(actual, expected)
     }
     
     func test_2rotations_3files() {
-        let fileSystem = FileSystemMock(files: [logURL, log1URL, log2URL])
-        let logrotate = FileRotate(fileURL: logURL, rotations: 2, fileSystem: fileSystem)
+        let fimeManager = FileManagerMock(files: [logURL, log1URL, log2URL])
+        let logrotate = LogrotateImpl(fileURL: logURL, rotations: 2, fileManager: fimeManager)
         try? logrotate.rotate()
         
-        let actual = fileSystem.files
+        let actual = fimeManager.files
         let expected = Set<URL>([log1URL, log2URL])
         XCTAssertEqual(actual, expected)
     }
     
     func test_2rotations_4files() {
-        let fileSystem = FileSystemMock(files: [logURL, log1URL, log2URL, log3URL])
-        let logrotate = FileRotate(fileURL: logURL, rotations: 2, fileSystem: fileSystem)
+        let fimeManager = FileManagerMock(files: [logURL, log1URL, log2URL, log3URL])
+        let logrotate = LogrotateImpl(fileURL: logURL, rotations: 2, fileManager: fimeManager)
         try? logrotate.rotate()
         
-        let actual = fileSystem.files
+        let actual = fimeManager.files
         let expected = Set<URL>([log1URL, log2URL, log3URL])
         XCTAssertEqual(actual, expected)
     }
     
     func testErrorPropagation() {
-        let fileSystem = BrokenFileSystem()
-        let logrotate = FileRotate(fileURL: logURL, rotations: 1, fileSystem: fileSystem)
+        let fimeManager = BrokenFileSystem()
+        let logrotate = LogrotateImpl(fileURL: logURL, rotations: 1, fileManager: fimeManager)
         
         XCTAssertThrowsError(try logrotate.rotate(), "An error when removing or moving an item") { (error) in
             XCTAssertTrue(error is BrokenFileSystem.IOError)
@@ -132,7 +132,7 @@ class FileRotateTests: XCTestCase {
     }
 }
 
-private class FileSystemMock: FileSystem {
+private class FileManagerMock: OSFileManager {
     
     private(set) var files = Set<URL>()
     
@@ -159,7 +159,7 @@ private class FileSystemMock: FileSystem {
     }
 }
 
-private class BrokenFileSystem: FileSystem {
+private class BrokenFileSystem: OSFileManager {
     
     struct IOError: Error { }
     

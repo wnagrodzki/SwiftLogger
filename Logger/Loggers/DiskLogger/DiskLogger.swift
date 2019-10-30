@@ -143,11 +143,11 @@ private class FileRotateFactory: LogrotateFactory {
 
 private class FileWriterFactory: SizeLimitedFileFactory {
     func makeInstance(fileURL: URL, fileSizeLimit: UInt64) throws -> SizeLimitedFile {
-        return try SizeLimitedFileImpl(fileURL: fileURL, fileSizeLimit: fileSizeLimit, fileFactory: FileHandleFactory())
+        return try SizeLimitedFileImpl(fileURL: fileURL, fileSizeLimit: fileSizeLimit, fileFactory: FileHandleFactoryImpl())
     }
 }
 
-private class FileHandleFactory: FileFactory {
+private class FileHandleFactoryImpl: FileHandleFactory {
     func makeInstance(forWritingTo: URL) throws -> OSFileHandle {
         return try FileHandle(forWritingTo: forWritingTo)
     }

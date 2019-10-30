@@ -24,7 +24,7 @@
 
 import Foundation
 
-protocol FileFactory {
+protocol FileHandleFactory {
     func makeInstance(forWritingTo: URL) throws -> OSFileHandle
 }
 
@@ -58,7 +58,7 @@ final class SizeLimitedFileImpl {
     ///   - fileURL: URL of the file.
     ///   - fileSizeLimit: Maximum size the file can reach in bytes.
     /// - Throws: An error that may occur while the file is being opened for writing.
-    init(fileURL: URL, fileSizeLimit: UInt64, fileFactory: FileFactory) throws {
+    init(fileURL: URL, fileSizeLimit: UInt64, fileFactory: FileHandleFactory) throws {
         file = try fileFactory.makeInstance(forWritingTo: fileURL)
         self.sizeLimit = fileSizeLimit
         currentSize = file.seekToEndOfFile()

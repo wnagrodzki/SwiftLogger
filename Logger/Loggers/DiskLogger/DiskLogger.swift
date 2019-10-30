@@ -186,4 +186,7 @@ private class FileHandleFactory: FileFactory {
 
 extension FileHandle: File {
     
+    func swift_write(_ data: Data) throws {
+        try __write(data, error: ())
+    }
 }

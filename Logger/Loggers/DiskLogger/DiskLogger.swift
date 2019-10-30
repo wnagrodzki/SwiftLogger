@@ -66,7 +66,7 @@ public final class DiskLogger: Logger {
     ///   - fileSizeLimit: Maximum size log file can reach in bytes. Attempt to exceeding that limit triggers log files rotation.
     ///   - rotations: Number of times log files are rotated before being removed.
     public convenience init(fileURL: URL, fileSizeLimit: UInt64, rotations: Int) {
-        self.init(fileURL: fileURL, fileSizeLimit: fileSizeLimit, rotations: rotations, fileManager: FileManager.default, sizeLimitedFileFactory: FileWriterFactory(),  logrotateFactory: FileRotateFactory())
+        self.init(fileURL: fileURL, fileSizeLimit: fileSizeLimit, rotations: rotations, fileManager: FileManager.default, sizeLimitedFileFactory: SizeLimitedFileFactoryImpl(),  logrotateFactory: LogrotateFactoryImpl())
     }
     
     init(fileURL: URL, fileSizeLimit: UInt64, rotations: Int, fileManager: OSFileManager, sizeLimitedFileFactory: SizeLimitedFileFactory, logrotateFactory: LogrotateFactory) {
@@ -135,13 +135,13 @@ public final class DiskLogger: Logger {
     }
 }
 
-private class FileRotateFactory: LogrotateFactory {
+private class LogrotateFactoryImpl: LogrotateFactory {
     func makeInstance(fileURL: URL, rotations: Int) -> Logrotate {
         return LogrotateImpl(fileURL: fileURL, rotations: rotations, fileManager: FileManager.default)
     }
 }
 
-private class FileWriterFactory: SizeLimitedFileFactory {
+private class SizeLimitedFileFactoryImpl: SizeLimitedFileFactory {
     func makeInstance(fileURL: URL, fileSizeLimit: UInt64) throws -> SizeLimitedFile {
         return try SizeLimitedFileImpl(fileURL: fileURL, fileSizeLimit: fileSizeLimit, fileFactory: FileHandleFactoryImpl())
     }

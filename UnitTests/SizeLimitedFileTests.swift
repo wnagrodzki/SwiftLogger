@@ -65,7 +65,7 @@ class SizeLimitedFileTests: XCTestCase {
     }
 }
 
-private class UnopenableFileFactory: FileFactory {
+private class UnopenableFileFactory: FileHandleFactory {
     
     struct OpenFileError: Error {}
     
@@ -74,7 +74,7 @@ private class UnopenableFileFactory: FileFactory {
     }
 }
 
-private class FileMockFactory: FileFactory {
+private class FileMockFactory: FileHandleFactory {
     
     let mock = FileMock()
     

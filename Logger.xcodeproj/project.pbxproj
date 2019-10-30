@@ -23,6 +23,7 @@
 		2ED103E12135C61100EB3683 /* LogrotateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ED103E02135C61100EB3683 /* LogrotateTests.swift */; };
 		2ED103E32135D3FB00EB3683 /* SizeLimitedFileTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ED103E22135D3FB00EB3683 /* SizeLimitedFileTests.swift */; };
 		2ED103E52138553B00EB3683 /* DiskLoggerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ED103E42138553B00EB3683 /* DiskLoggerTests.swift */; };
+		2ED83781236A19A60008C01F /* OSFileHandle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ED83780236A19A60008C01F /* OSFileHandle.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -66,6 +67,7 @@
 		2ED103E02135C61100EB3683 /* LogrotateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogrotateTests.swift; sourceTree = "<group>"; };
 		2ED103E22135D3FB00EB3683 /* SizeLimitedFileTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SizeLimitedFileTests.swift; sourceTree = "<group>"; };
 		2ED103E42138553B00EB3683 /* DiskLoggerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiskLoggerTests.swift; sourceTree = "<group>"; };
+		2ED83780236A19A60008C01F /* OSFileHandle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OSFileHandle.swift; sourceTree = "<group>"; };
 		2EDA8AE8213ACCFF00FE5840 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -149,6 +151,7 @@
 				2EBF4B552122B598008E4117 /* SizeLimitedFile.swift */,
 				2EBF4B562122B598008E4117 /* Logrotate.swift */,
 				2ED077DA2132B0320058EEFC /* OSFileManager.swift */,
+				2ED83780236A19A60008C01F /* OSFileHandle.swift */,
 			);
 			path = DiskLogger;
 			sourceTree = "<group>";
@@ -259,6 +262,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2EBF4B582122B598008E4117 /* SizeLimitedFile.swift in Sources */,
+				2ED83781236A19A60008C01F /* OSFileHandle.swift in Sources */,
 				2EBF4B572122B598008E4117 /* DiskLogger.swift in Sources */,
 				2EBF4B4C2122AF53008E4117 /* NullLogger.swift in Sources */,
 				2EBF4B3E2122AA34008E4117 /* Logger.swift in Sources */,

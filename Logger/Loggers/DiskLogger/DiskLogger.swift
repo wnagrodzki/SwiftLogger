@@ -148,14 +148,7 @@ private class FileWriterFactory: SizeLimitedFileFactory {
 }
 
 private class FileHandleFactory: FileFactory {
-    func makeInstance(forWritingTo: URL) throws -> File {
+    func makeInstance(forWritingTo: URL) throws -> OSFileHandle {
         return try FileHandle(forWritingTo: forWritingTo)
-    }
-}
-
-extension FileHandle: File {
-    
-    func swift_write(_ data: Data) throws {
-        try __write(data, error: ())
     }
 }

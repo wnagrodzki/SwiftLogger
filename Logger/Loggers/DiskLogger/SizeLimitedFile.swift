@@ -24,15 +24,8 @@
 
 import Foundation
 
-protocol File {
-    func seekToEndOfFile() -> UInt64
-    func swift_write(_ data: Data) throws
-    func synchronizeFile()
-    func closeFile()
-}
-
 protocol FileFactory {
-    func makeInstance(forWritingTo: URL) throws -> File
+    func makeInstance(forWritingTo: URL) throws -> OSFileHandle
 }
 
 /// Write failed as allowed size limit would be exceeded.
@@ -55,7 +48,7 @@ protocol SizeLimitedFile {
 /// Allows writing to a file while respecting allowed size limit.
 final class SizeLimitedFileImpl {
     
-    private let file: File
+    private let file: OSFileHandle
     private let sizeLimit: UInt64
     private var currentSize: UInt64
     

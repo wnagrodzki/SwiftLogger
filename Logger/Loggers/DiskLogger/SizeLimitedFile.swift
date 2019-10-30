@@ -35,14 +35,31 @@ protocol FileFactory {
     func makeInstance(forWritingTo: URL) throws -> File
 }
 
+/// Write failed as allowed size limit would be exceeded.
+public struct SizeLimitedFileQuotaReached: Error {}
+
 /// Allows writing to a file while respecting allowed size limit.
-final class FileWriter {
+protocol SizeLimitedFile {
+    
+    /// Synchronously writes `data` at the end of the file.
+    ///
+    /// - Parameter data: The data to be written.
+    /// - Throws: Throws an error if no free space is left on the file system, or if any other writing error occurs.
+    ///           Throws `SizeLimitedFileQuotaReached` if allowed size limit would be exceeded.
+    func write(_ data: Data) throws
+    
+    /// Writes all in-memory data to permanent storage and closes the file.
+    func synchronizeAndCloseFile()
+}
+
+/// Allows writing to a file while respecting allowed size limit.
+final class SizeLimitedFileImpl {
     
     private let file: File
     private let sizeLimit: UInt64
     private var currentSize: UInt64
     
-    /// Initializes new FileWriter instance.
+    /// Initializes new SizeLimitedFileImpl instance.
     ///
     /// - Parameters:
     ///   - fileURL: URL of the file.
@@ -55,7 +72,7 @@ final class FileWriter {
     }
 }
 
-extension FileWriter: SizeLimitedFile {
+extension SizeLimitedFileImpl: SizeLimitedFile {
     
     func write(_ data: Data) throws {
         let dataSize = UInt64(data.count)

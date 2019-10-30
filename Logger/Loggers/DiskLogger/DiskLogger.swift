@@ -24,23 +24,6 @@
 
 import Foundation
 
-/// Write failed as allowed size limit would be exceeded.
-public struct SizeLimitedFileQuotaReached: Error {}
-
-/// Allows writing to a file while respecting allowed size limit.
-protocol SizeLimitedFile {
-    
-    /// Synchronously writes `data` at the end of the file.
-    ///
-    /// - Parameter data: The data to be written.
-    /// - Throws: Throws an error if no free space is left on the file system, or if any other writing error occurs.
-    ///           Throws `SizeLimitedFileQuotaReached` if allowed size limit would be exceeded.
-    func write(_ data: Data) throws
-    
-    /// Writes all in-memory data to permanent storage and closes the file.
-    func synchronizeAndCloseFile()
-}
-
 protocol SizeLimitedFileFactory {
     
     /// Returns newly initialized SizeLimitedFile instance.
@@ -174,7 +157,7 @@ private class FileRotateFactory: LogrotateFactory {
 
 private class FileWriterFactory: SizeLimitedFileFactory {
     func makeInstance(fileURL: URL, fileSizeLimit: UInt64) throws -> SizeLimitedFile {
-        return try FileWriter(fileURL: fileURL, fileSizeLimit: fileSizeLimit, fileFactory: FileHandleFactory())
+        return try SizeLimitedFileImpl(fileURL: fileURL, fileSizeLimit: fileSizeLimit, fileFactory: FileHandleFactory())
     }
 }
 

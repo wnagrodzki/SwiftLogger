@@ -18,7 +18,7 @@ protocol OSFileHandle {
 extension FileHandle: OSFileHandle {
     
     func osSeekToEndOfFile() throws -> UInt64 {
-        if #available(iOS 13.0, *) {
+        if #available(OSX 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *) {
             var offsetInFile: UInt64 = 0
             try __seek(toEndReturningOffset:&offsetInFile)
             return offsetInFile
@@ -28,7 +28,7 @@ extension FileHandle: OSFileHandle {
     }
     
     func osWrite(_ data: Data) throws {
-        if #available(iOS 13.0, *) {
+        if #available(OSX 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *) {
             try __write(data, error: ())
         } else {
             fatalError()
@@ -36,7 +36,7 @@ extension FileHandle: OSFileHandle {
     }
     
     func osSynchronizeFile() throws {
-        if #available(iOS 13.0, *) {
+        if #available(OSX 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *) {
             try synchronize()
         } else {
             fatalError()
@@ -44,7 +44,7 @@ extension FileHandle: OSFileHandle {
     }
     
     func osCloseFile() throws {
-        if #available(iOS 13.0, *) {
+        if #available(OSX 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *) {
             try close()
         } else {
             fatalError()

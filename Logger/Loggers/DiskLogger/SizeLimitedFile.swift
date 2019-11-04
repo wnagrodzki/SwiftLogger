@@ -42,7 +42,7 @@ protocol SizeLimitedFile {
     func write(_ data: Data) throws
     
     /// Writes all in-memory data to permanent storage and closes the file.
-    func synchronizeAndCloseFile()
+    func synchronizeAndCloseFile() throws
 }
 
 /// Allows writing to a file while respecting allowed size limit.
@@ -61,7 +61,7 @@ final class SizeLimitedFileImpl {
     init(fileURL: URL, fileSizeLimit: UInt64, fileFactory: FileHandleFactory) throws {
         file = try fileFactory.makeInstance(forWritingTo: fileURL)
         self.sizeLimit = fileSizeLimit
-        currentSize = file.seekToEndOfFile()
+        currentSize = try file.osSeekToEndOfFile()
     }
 }
 
@@ -72,12 +72,12 @@ extension SizeLimitedFileImpl: SizeLimitedFile {
         guard currentSize + dataSize <= sizeLimit else {
             throw SizeLimitedFileQuotaReached()
         }
-        try file.swift_write(data)
+        try file.osWrite(data)
         currentSize += dataSize
     }
     
-    func synchronizeAndCloseFile() {
-        file.synchronizeFile()
-        file.closeFile()
+    func synchronizeAndCloseFile() throws {
+        try file.osSynchronizeFile()
+        try file.osCloseFile()
     }
 }

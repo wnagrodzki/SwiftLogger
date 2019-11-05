@@ -1,5 +1,11 @@
-language: swift
-osx_image: xcode11.2
-xcode_project: Logger.xcodeproj
-script: xcodebuild test -project Logger.xcodeproj -scheme Logger -destination 'platform=iOS Simulator,name=iPhone 11,OS=13.2'
-after_success: bash <(curl -s https://codecov.io/bash)
+os:
+  osx
+language: 
+  swift
+osx_image: 
+  xcode11.2
+script:
+  - swift build
+  - swift test
+after_success: 
+  - bash <(curl -s https://codecov.io/bash)

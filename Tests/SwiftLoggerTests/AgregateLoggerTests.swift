@@ -23,7 +23,7 @@
 //
 
 import XCTest
-@testable import Logger
+@testable import SwiftLogger
 
 class AgregateLoggerTests: XCTestCase {
 

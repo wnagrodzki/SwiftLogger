@@ -23,33 +23,28 @@
 //
 
 import XCTest
-@testable import Logger
+@testable import SwiftLogger
 
-class LoggetTests: XCTestCase {
+class LogStringConvertibleTests: XCTestCase {
 
-    func testLocation() {
-        let mock = LoggerMock()
-        mock.log("", level: .critical)
-        XCTAssertEqual(mock.location, "LoggetTests:32 testLocation()")
+    func testZeroObjectsDescription() {
+        let objects = [Int]()
+        XCTAssertEqual(objects.logDescription, "[]")
     }
     
-    func testLogLevelLogDescription() {
-        XCTAssertEqual(LogLevel.emergency.logDescription, "emerg")
-        XCTAssertEqual(LogLevel.alert.logDescription, "alert")
-        XCTAssertEqual(LogLevel.critical.logDescription, "crit")
-        XCTAssertEqual(LogLevel.error.logDescription, "err")
-        XCTAssertEqual(LogLevel.warning.logDescription, "warning")
-        XCTAssertEqual(LogLevel.notice.logDescription, "notice")
-        XCTAssertEqual(LogLevel.informational.logDescription, "info")
-        XCTAssertEqual(LogLevel.debug.logDescription, "debug")
+    func testOneObjectDescription() {
+        let objects = [1]
+        XCTAssertEqual(objects.logDescription, "[1]")
+    }
+    
+    func testTwoObjectsDescription() {
+        let objects = [1, 2]
+        XCTAssertEqual(objects.logDescription, "[1, 2]")
     }
 }
 
-private class LoggerMock: Logger {
-    
-    var location: String?
-    
-    func log(time: Date, level: LogLevel, location: String, message: @autoclosure () -> String) {
-        self.location = location
+extension Int: LogStringConvertible {
+    public var logDescription: String {
+        return String(describing: self)
     }
 }

@@ -60,7 +60,7 @@ class SizeLimitedFileTests: XCTestCase {
     func testSynchronizingAndClosingFile() throws {
         let factory = FileMockFactory()
         let writer = try SizeLimitedFileImpl(fileURL: logURL, fileSizeLimit: 1, fileFactory: factory)
-        writer.synchronizeAndCloseFile()
+        try writer.synchronizeAndCloseFile()
         XCTAssertTrue(factory.mock.synchronizeFileCallCount == 1 && factory.mock.closeFileCallCount == 1)
     }
 }
@@ -89,19 +89,19 @@ private class FileMock: OSFileHandle {
     private(set) var synchronizeFileCallCount = 0
     private(set) var closeFileCallCount = 0
     
-    func seekToEndOfFile() -> UInt64 {
+    func osSeekToEndOfFile() throws -> UInt64 {
         return 0
     }
     
-    func swift_write(_ data: Data) throws {
+    func osWrite(_ data: Data) throws {
         self.writtenData.append(data)
     }
     
-    func synchronizeFile() {
+    func osSynchronizeFile() throws {
         synchronizeFileCallCount += 1
     }
     
-    func closeFile() {
+    func osCloseFile() throws {
         closeFileCallCount += 1
     }
 }

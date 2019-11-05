@@ -30,89 +30,95 @@ class DiskLoggerTests: XCTestCase {
     let logURL = URL(fileURLWithPath: "/var/log/application.log")
     
     func testLoggingMessageToFile() {
-        let expectation = XCTestExpectation(description: "write(_:) was called on SizeLimitedFile")
-        expectation.expectedFulfillmentCount = 1
-        
-        let fimeManager = FileManagerStub()
-        let sizeLimitedFileFactory = SizeLimitedFileMockFactory(writeCall: expectation)
-        let logrotateFactory = LogrotateMockFactory()
-        let logger = DiskLogger(fileURL: logURL,
-                                fileSizeLimit: 1024,
-                                rotations: 1,
-                                fileManager: fimeManager,
-                                sizeLimitedFileFactory: sizeLimitedFileFactory,
-                                logrotateFactory: logrotateFactory)
-        
-        logger.log("message", level: .critical)
-        
-        let result = XCTWaiter().wait(for: [expectation], timeout: 1.0)
-        XCTAssertEqual(result, .completed)
-        
-        XCTAssertEqual(sizeLimitedFileFactory.files.count, 1)
-        
-        // "2018-08-30 17:23:11.514 <crit> DiskLoggerTests:46 testWritingMessageToFile() a message\n"
-        let loggedMessage = String(decoding: sizeLimitedFileFactory.files[0].data, as: UTF8.self)
-        let expectedSuffix = " <crit> DiskLoggerTests:46 testLoggingMessageToFile() message\n"
-        
-        XCTAssertTrue(loggedMessage.hasSuffix(expectedSuffix))
+        if #available(OSX 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *) {
+            let expectation = XCTestExpectation(description: "write(_:) was called on SizeLimitedFile")
+            expectation.expectedFulfillmentCount = 1
+            
+            let fimeManager = FileManagerStub()
+            let sizeLimitedFileFactory = SizeLimitedFileMockFactory(writeCall: expectation)
+            let logrotateFactory = LogrotateMockFactory()
+            let logger = DiskLogger(fileURL: logURL,
+                                    fileSizeLimit: 1024,
+                                    rotations: 1,
+                                    fileManager: fimeManager,
+                                    sizeLimitedFileFactory: sizeLimitedFileFactory,
+                                    logrotateFactory: logrotateFactory)
+            
+            logger.log("message", level: .critical)
+            
+            let result = XCTWaiter().wait(for: [expectation], timeout: 1.0)
+            XCTAssertEqual(result, .completed)
+            
+            XCTAssertEqual(sizeLimitedFileFactory.files.count, 1)
+            
+            // "2018-08-30 17:23:11.514 <crit> DiskLoggerTests:46 testWritingMessageToFile() a message\n"
+            let loggedMessage = String(decoding: sizeLimitedFileFactory.files[0].data, as: UTF8.self)
+            let expectedSuffix = " <crit> DiskLoggerTests:47 testLoggingMessageToFile() message\n"
+            
+            XCTAssertTrue(loggedMessage.hasSuffix(expectedSuffix))
+        }
     }
     
     func testExceedingFileSizeLimit() {
-        let expectation = XCTestExpectation(description: "write(_:) was called on SizeLimitedFile")
-        expectation.expectedFulfillmentCount = 2
-        
-        let fimeManager = FileManagerStub()
-        let sizeLimitedFileFactory = SizeLimitedFileMockFactory(writeCall: expectation)
-        let logrotateFactory = LogrotateMockFactory()
-        let logger = DiskLogger(fileURL: logURL,
-                                fileSizeLimit: 91,
-                                rotations: 1,
-                                fileManager: fimeManager,
-                                sizeLimitedFileFactory: sizeLimitedFileFactory,
-                                logrotateFactory: logrotateFactory)
-        
-        logger.log("1st message", level: .critical)
-        logger.log("2st message", level: .critical)
-        
-        let result = XCTWaiter().wait(for: [expectation], timeout: 1.0)
-        XCTAssertEqual(result, .completed)
-        
-        XCTAssertEqual(sizeLimitedFileFactory.files.count, 2)
-        
-        // "2018-08-31 18:29:34.748 <crit> DiskLoggerTests:75 testExceedingFileSizeLimit() 2st message\n"
-        let loggedMessage = String(decoding: sizeLimitedFileFactory.files[1].data, as: UTF8.self)
-        let expectedSuffix = " <crit> DiskLoggerTests:75 testExceedingFileSizeLimit() 2st message\n"
-        
-        XCTAssertTrue(loggedMessage.hasSuffix(expectedSuffix))
+        if #available(OSX 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *) {
+            let expectation = XCTestExpectation(description: "write(_:) was called on SizeLimitedFile")
+            expectation.expectedFulfillmentCount = 2
+            
+            let fimeManager = FileManagerStub()
+            let sizeLimitedFileFactory = SizeLimitedFileMockFactory(writeCall: expectation)
+            let logrotateFactory = LogrotateMockFactory()
+            let logger = DiskLogger(fileURL: logURL,
+                                    fileSizeLimit: 91,
+                                    rotations: 1,
+                                    fileManager: fimeManager,
+                                    sizeLimitedFileFactory: sizeLimitedFileFactory,
+                                    logrotateFactory: logrotateFactory)
+            
+            logger.log("1st message", level: .critical)
+            logger.log("2st message", level: .critical)
+            
+            let result = XCTWaiter().wait(for: [expectation], timeout: 1.0)
+            XCTAssertEqual(result, .completed)
+            
+            XCTAssertEqual(sizeLimitedFileFactory.files.count, 2)
+            
+            // "2018-08-31 18:29:34.748 <crit> DiskLoggerTests:75 testExceedingFileSizeLimit() 2st message\n"
+            let loggedMessage = String(decoding: sizeLimitedFileFactory.files[1].data, as: UTF8.self)
+            let expectedSuffix = " <crit> DiskLoggerTests:78 testExceedingFileSizeLimit() 2st message\n"
+            
+            XCTAssertTrue(loggedMessage.hasSuffix(expectedSuffix))
+        }
     }
     
     func testErrorDuringLogProcess() {
-        let expectation = XCTestExpectation(description: "write(_:) was called on SizeLimitedFile")
-        expectation.expectedFulfillmentCount = 2
-        
-        let fimeManager = FileManagerStub()
-        let sizeLimitedFileFactory = UnwritableFileStubFactory(writeCall: expectation)
-        let logrotateFactory = LogrotateMockFactory()
-        let logger = DiskLogger(fileURL: logURL,
-                                fileSizeLimit: 91,
-                                rotations: 1,
-                                fileManager: fimeManager,
-                                sizeLimitedFileFactory: sizeLimitedFileFactory,
-                                logrotateFactory: logrotateFactory)
-        
-        logger.log("1st message", level: .critical)
-        logger.log("2st message", level: .critical)
-        
-        let result = XCTWaiter().wait(for: [expectation], timeout: 1.0)
-        XCTAssertEqual(result, .completed)
-        
-        XCTAssertEqual(sizeLimitedFileFactory.files.count, 1)
-        
-        // "2018-08-31 18:29:34.748 <crit> DiskLoggerTests:75 testExceedingFileSizeLimit() 2st message\n"
-        let loggedMessage = String(decoding: sizeLimitedFileFactory.files[0].data, as: UTF8.self)
-        let expectedOccurence = " <warning> WriteFailed()"
-        
-        XCTAssertTrue(loggedMessage.contains(expectedOccurence))
+        if #available(OSX 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *) {
+            let expectation = XCTestExpectation(description: "write(_:) was called on SizeLimitedFile")
+            expectation.expectedFulfillmentCount = 2
+            
+            let fimeManager = FileManagerStub()
+            let sizeLimitedFileFactory = UnwritableFileStubFactory(writeCall: expectation)
+            let logrotateFactory = LogrotateMockFactory()
+            let logger = DiskLogger(fileURL: logURL,
+                                    fileSizeLimit: 91,
+                                    rotations: 1,
+                                    fileManager: fimeManager,
+                                    sizeLimitedFileFactory: sizeLimitedFileFactory,
+                                    logrotateFactory: logrotateFactory)
+            
+            logger.log("1st message", level: .critical)
+            logger.log("2st message", level: .critical)
+            
+            let result = XCTWaiter().wait(for: [expectation], timeout: 1.0)
+            XCTAssertEqual(result, .completed)
+            
+            XCTAssertEqual(sizeLimitedFileFactory.files.count, 1)
+            
+            // "2018-08-31 18:29:34.748 <crit> DiskLoggerTests:75 testExceedingFileSizeLimit() 2st message\n"
+            let loggedMessage = String(decoding: sizeLimitedFileFactory.files[0].data, as: UTF8.self)
+            let expectedOccurence = " <warning> WriteFailed()"
+            
+            XCTAssertTrue(loggedMessage.contains(expectedOccurence))
+        }
     }
 }
 

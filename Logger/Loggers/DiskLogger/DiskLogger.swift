@@ -46,6 +46,7 @@ protocol LogrotateFactory {
 }
 
 /// Logger that writes messages into the file at specified URL with log rotation support.
+@available(OSX 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
 public final class DiskLogger: Logger {
     
     private let fileURL: URL
@@ -97,7 +98,7 @@ public final class DiskLogger: Logger {
                     try self.writeBuffer()
                 }
                 catch is SizeLimitedFileQuotaReached {
-                    self.closeSizeLimitedFile()
+                    try self.closeSizeLimitedFile()
                     try self.rotateLogFiles()
                     try self.openSizeLimitedFile()
                     try self.writeBuffer()
@@ -124,8 +125,8 @@ public final class DiskLogger: Logger {
         buffer.removeAll()
     }
     
-    private func closeSizeLimitedFile() {
-        self.sizeLimitedFile.synchronizeAndCloseFile()
+    private func closeSizeLimitedFile() throws {
+        try self.sizeLimitedFile.synchronizeAndCloseFile()
         self.sizeLimitedFile = nil
     }
     

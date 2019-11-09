@@ -22,14 +22,22 @@
 // SOFTWARE.
 //
 
-#import <Foundation/Foundation.h>
+import Foundation
 
-NS_ASSUME_NONNULL_BEGIN
+public protocol OSFileManager {
+    func itemExists(at URL: URL) -> Bool
+    func removeItem(at URL: URL) throws
+    func moveItem(at srcURL: URL, to dstURL: URL) throws
+    func createFile(at URL: URL) -> Bool
+}
 
-@interface NSFileHandle (Swift)
-
-- (BOOL)swift_writeData:(NSData *)data error:(NSError **)error;
-
-@end
-
-NS_ASSUME_NONNULL_END
+extension FileManager: OSFileManager {
+    
+    public func itemExists(at URL: URL) -> Bool {
+        return fileExists(atPath: URL.path)
+    }
+    
+    public func createFile(at URL: URL) -> Bool {
+        return createFile(atPath: URL.path, contents: nil, attributes: nil)
+    }
+}

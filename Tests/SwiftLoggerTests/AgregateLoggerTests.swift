@@ -23,33 +23,46 @@
 //
 
 import XCTest
-@testable import Logger
+@testable import SwiftLogger
 
-class LoggetTests: XCTestCase {
+class AgregateLoggerTests: XCTestCase {
 
-    func testLocation() {
-        let mock = LoggerMock()
-        mock.log("", level: .critical)
-        XCTAssertEqual(mock.location, "LoggetTests:32 testLocation()")
-    }
-    
-    func testLogLevelLogDescription() {
-        XCTAssertEqual(LogLevel.emergency.logDescription, "emerg")
-        XCTAssertEqual(LogLevel.alert.logDescription, "alert")
-        XCTAssertEqual(LogLevel.critical.logDescription, "crit")
-        XCTAssertEqual(LogLevel.error.logDescription, "err")
-        XCTAssertEqual(LogLevel.warning.logDescription, "warning")
-        XCTAssertEqual(LogLevel.notice.logDescription, "notice")
-        XCTAssertEqual(LogLevel.informational.logDescription, "info")
-        XCTAssertEqual(LogLevel.debug.logDescription, "debug")
+    func testCallForwarding() {
+        let loggerA = LoggerMock()
+        let loggerB = LoggerMock()
+        let agregateLogger = AgregateLogger(loggers: [loggerA, loggerB])
+        agregateLogger.log("0", level: .emergency)
+        agregateLogger.log("1", level: .alert)
+        agregateLogger.log("2", level: .critical)
+        agregateLogger.log("3", level: .error)
+        agregateLogger.log("4", level: .warning)
+        agregateLogger.log("5", level: .notice)
+        agregateLogger.log("6", level: .informational)
+        agregateLogger.log("7", level: .debug)
+        XCTAssertEqual(loggerA, loggerB)
     }
 }
 
 private class LoggerMock: Logger {
     
-    var location: String?
+    struct Log: Equatable {
+        let time: Date
+        let level: LogLevel
+        let location: String
+        let message: String
+    }
+    
+    private var logs = [Log]()
     
     func log(time: Date, level: LogLevel, location: String, message: @autoclosure () -> String) {
-        self.location = location
+        let log = Log(time: time, level: level, location: location, message: message())
+        logs.append(log)
+    }
+}
+
+extension LoggerMock: Equatable {
+    
+    static func == (lhs: LoggerMock, rhs: LoggerMock) -> Bool {
+        return lhs.logs == rhs.logs
     }
 }

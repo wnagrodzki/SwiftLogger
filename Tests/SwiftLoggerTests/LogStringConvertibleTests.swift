@@ -22,23 +22,29 @@
 // SOFTWARE.
 //
 
-#import "NSFileHandle+Swift.h"
+import XCTest
+@testable import SwiftLogger
 
-@implementation NSFileHandle (Swift)
+class LogStringConvertibleTests: XCTestCase {
 
-- (BOOL)swift_writeData:(NSData *)data error:(NSError **)error {
-    @try {
-        [self writeData:data];
-        return YES;
+    func testZeroObjectsDescription() {
+        let objects = [Int]()
+        XCTAssertEqual(objects.logDescription, "[]")
     }
-    @catch (NSException *exception) {
-        if (error == nil) {
-            return NO;
-        }
-        NSDictionary * userInfo = @{NSLocalizedFailureReasonErrorKey: exception.reason};
-        *error = [NSError errorWithDomain:@"NSFileHandleException" code:1 userInfo:userInfo];
-        return NO;
+    
+    func testOneObjectDescription() {
+        let objects = [1]
+        XCTAssertEqual(objects.logDescription, "[1]")
+    }
+    
+    func testTwoObjectsDescription() {
+        let objects = [1, 2]
+        XCTAssertEqual(objects.logDescription, "[1, 2]")
     }
 }
 
-@end
+extension Int: LogStringConvertible {
+    public var logDescription: String {
+        return String(describing: self)
+    }
+}

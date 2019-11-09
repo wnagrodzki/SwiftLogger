@@ -23,22 +23,22 @@
 //
 
 import XCTest
-@testable import Logger
+@testable import SwiftLogger
 
-class FileWriterTests: XCTestCase {
+class SizeLimitedFileTests: XCTestCase {
     
     let logURL = URL(fileURLWithPath: "/var/log/application.log")
     
     func testFileOpeningFailure() {
         let factory = UnopenableFileFactory()
-        XCTAssertThrowsError(try FileWriter(fileURL: logURL, fileSizeLimit: 0, fileFactory: factory), "file open failure") { (error) in
+        XCTAssertThrowsError(try SizeLimitedFileImpl(fileURL: logURL, fileSizeLimit: 0, fileFactory: factory), "file open failure") { (error) in
             XCTAssertTrue(error is UnopenableFileFactory.OpenFileError)
         }
     }
     
     func testKeepingFileSizeLimit() throws {
         let factory = FileMockFactory()
-        let writer = try FileWriter(fileURL: logURL, fileSizeLimit: 1, fileFactory: factory)
+        let writer = try SizeLimitedFileImpl(fileURL: logURL, fileSizeLimit: 1, fileFactory: factory)
         let data = Data([0])
         try writer.write(data)
         
@@ -47,7 +47,7 @@ class FileWriterTests: XCTestCase {
     
     func testExceedingFileSizeLimit() throws {
         let factory = FileMockFactory()
-        let writer = try FileWriter(fileURL: logURL, fileSizeLimit: 1, fileFactory: factory)
+        let writer = try SizeLimitedFileImpl(fileURL: logURL, fileSizeLimit: 1, fileFactory: factory)
         let data = Data([0, 0])
         
         XCTAssertThrowsError(try writer.write(data), "file size limit exceeded") { (error) in
@@ -59,49 +59,49 @@ class FileWriterTests: XCTestCase {
     
     func testSynchronizingAndClosingFile() throws {
         let factory = FileMockFactory()
-        let writer = try FileWriter(fileURL: logURL, fileSizeLimit: 1, fileFactory: factory)
-        writer.synchronizeAndCloseFile()
+        let writer = try SizeLimitedFileImpl(fileURL: logURL, fileSizeLimit: 1, fileFactory: factory)
+        try writer.synchronizeAndCloseFile()
         XCTAssertTrue(factory.mock.synchronizeFileCallCount == 1 && factory.mock.closeFileCallCount == 1)
     }
 }
 
-private class UnopenableFileFactory: FileFactory {
+private class UnopenableFileFactory: FileHandleFactory {
     
     struct OpenFileError: Error {}
     
-    func makeInstance(forWritingTo: URL) throws -> File {
+    func makeInstance(forWritingTo: URL) throws -> OSFileHandle {
         throw OpenFileError()
     }
 }
 
-private class FileMockFactory: FileFactory {
+private class FileMockFactory: FileHandleFactory {
     
     let mock = FileMock()
     
-    func makeInstance(forWritingTo: URL) throws -> File {
+    func makeInstance(forWritingTo: URL) throws -> OSFileHandle {
         return mock
     }
 }
 
-private class FileMock: File {
+private class FileMock: OSFileHandle {
     
     private(set) var writtenData = Data()
     private(set) var synchronizeFileCallCount = 0
     private(set) var closeFileCallCount = 0
     
-    func seekToEndOfFile() -> UInt64 {
+    func osSeekToEndOfFile() throws -> UInt64 {
         return 0
     }
     
-    func swift_write(_ data: Data) throws {
+    func osWrite(_ data: Data) throws {
         self.writtenData.append(data)
     }
     
-    func synchronizeFile() {
+    func osSynchronizeFile() throws {
         synchronizeFileCallCount += 1
     }
     
-    func closeFile() {
+    func osCloseFile() throws {
         closeFileCallCount += 1
     }
 }

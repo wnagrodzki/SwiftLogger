@@ -24,50 +24,60 @@
 
 import Foundation
 
-protocol File {
-    func seekToEndOfFile() -> UInt64
-    func swift_write(_ data: Data) throws
-    func synchronizeFile()
-    func closeFile()
+protocol FileHandleFactory {
+    func makeInstance(forWritingTo: URL) throws -> OSFileHandle
 }
 
-protocol FileFactory {
-    func makeInstance(forWritingTo: URL) throws -> File
+/// Write failed as allowed size limit would be exceeded.
+public struct SizeLimitedFileQuotaReached: Error {}
+
+/// Allows writing to a file while respecting allowed size limit.
+protocol SizeLimitedFile {
+    
+    /// Synchronously writes `data` at the end of the file.
+    ///
+    /// - Parameter data: The data to be written.
+    /// - Throws: Throws an error if no free space is left on the file system, or if any other writing error occurs.
+    ///           Throws `SizeLimitedFileQuotaReached` if allowed size limit would be exceeded.
+    func write(_ data: Data) throws
+    
+    /// Writes all in-memory data to permanent storage and closes the file.
+    func synchronizeAndCloseFile() throws
 }
 
 /// Allows writing to a file while respecting allowed size limit.
-final class FileWriter {
+final class SizeLimitedFileImpl {
     
-    private let file: File
+    private let file: OSFileHandle
     private let sizeLimit: UInt64
     private var currentSize: UInt64
     
-    /// Initializes new FileWriter instance.
+    /// Initializes new SizeLimitedFileImpl instance.
     ///
     /// - Parameters:
     ///   - fileURL: URL of the file.
     ///   - fileSizeLimit: Maximum size the file can reach in bytes.
     /// - Throws: An error that may occur while the file is being opened for writing.
-    init(fileURL: URL, fileSizeLimit: UInt64, fileFactory: FileFactory) throws {
+    init(fileURL: URL, fileSizeLimit: UInt64, fileFactory: FileHandleFactory) throws {
         file = try fileFactory.makeInstance(forWritingTo: fileURL)
         self.sizeLimit = fileSizeLimit
-        currentSize = file.seekToEndOfFile()
+        currentSize = try file.osSeekToEndOfFile()
     }
 }
 
-extension FileWriter: SizeLimitedFile {
+extension SizeLimitedFileImpl: SizeLimitedFile {
     
     func write(_ data: Data) throws {
         let dataSize = UInt64(data.count)
         guard currentSize + dataSize <= sizeLimit else {
             throw SizeLimitedFileQuotaReached()
         }
-        try file.swift_write(data)
+        try file.osWrite(data)
         currentSize += dataSize
     }
     
-    func synchronizeAndCloseFile() {
-        file.synchronizeFile()
-        file.closeFile()
+    func synchronizeAndCloseFile() throws {
+        try file.osSynchronizeFile()
+        try file.osCloseFile()
     }
 }

@@ -1,5 +1,14 @@
-language: swift
-osx_image: xcode11.2
-xcode_project: Logger.xcodeproj
-script: xcodebuild test -project Logger.xcodeproj -scheme Logger -destination 'platform=iOS Simulator,name=iPhone 11,OS=13.2'
-after_success: bash <(curl -s https://codecov.io/bash)
+os:
+  osx
+language: 
+  swift
+osx_image: 
+  xcode11.2
+script:
+  - sw_vers
+  - swift build
+  - swift test --enable-code-coverage
+after_success:
+  - xcrun llvm-cov report .build/debug/SwiftLoggerPackageTests.xctest/Contents/MacOS/SwiftLoggerPackageTests -instr-profile .build/debug/codecov/default.profdata
+  - xcrun llvm-cov export -format="lcov" .build/debug/SwiftLoggerPackageTests.xctest/Contents/MacOS/SwiftLoggerPackageTests -instr-profile .build/debug/codecov/default.profdata > info.lcov
+  - bash <(curl https://codecov.io/bash)

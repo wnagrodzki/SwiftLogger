@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "1000"
+   LastUpgradeVersion = "1120"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -14,10 +14,24 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "2EBF4B392122AA34008E4117"
-               BuildableName = "libLogger.a"
-               BlueprintName = "Logger"
-               ReferencedContainer = "container:Logger.xcodeproj">
+               BlueprintIdentifier = "SwiftLogger"
+               BuildableName = "SwiftLogger"
+               BlueprintName = "SwiftLogger"
+               ReferencedContainer = "container:">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "SwiftLoggerTests"
+               BuildableName = "SwiftLoggerTests"
+               BlueprintName = "SwiftLoggerTests"
+               ReferencedContainer = "container:">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -26,31 +40,20 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      codeCoverageEnabled = "YES"
-      shouldUseLaunchSchemeArgsEnv = "YES">
+      shouldUseLaunchSchemeArgsEnv = "YES"
+      codeCoverageEnabled = "YES">
       <Testables>
          <TestableReference
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "2E58D35921316C3500BEF81A"
-               BuildableName = "UnitTests.xctest"
-               BlueprintName = "UnitTests"
-               ReferencedContainer = "container:Logger.xcodeproj">
+               BlueprintIdentifier = "SwiftLoggerTests"
+               BuildableName = "SwiftLoggerTests"
+               BlueprintName = "SwiftLoggerTests"
+               ReferencedContainer = "container:">
             </BuildableReference>
          </TestableReference>
       </Testables>
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "2EBF4B392122AA34008E4117"
-            BuildableName = "libLogger.a"
-            BlueprintName = "Logger"
-            ReferencedContainer = "container:Logger.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
-      <AdditionalOptions>
-      </AdditionalOptions>
    </TestAction>
    <LaunchAction
       buildConfiguration = "Debug"
@@ -62,17 +65,6 @@
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
       allowLocationSimulation = "YES">
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "2EBF4B392122AA34008E4117"
-            BuildableName = "libLogger.a"
-            BlueprintName = "Logger"
-            ReferencedContainer = "container:Logger.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
-      <AdditionalOptions>
-      </AdditionalOptions>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"
@@ -83,10 +75,10 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "2EBF4B392122AA34008E4117"
-            BuildableName = "libLogger.a"
-            BlueprintName = "Logger"
-            ReferencedContainer = "container:Logger.xcodeproj">
+            BlueprintIdentifier = "SwiftLogger"
+            BuildableName = "SwiftLogger"
+            BlueprintName = "SwiftLogger"
+            ReferencedContainer = "container:">
          </BuildableReference>
       </MacroExpansion>
    </ProfileAction>
